@@ -51,12 +51,15 @@ test:
 	@echo $(sistoper)
 
 $(exe): $(units_o) makefile
+	@mkdir -p $(bin)
 	$(compiler) -o $(exe)  $(units_o) $(ld_libs)
 
 $(obj)/%.o : $(src)/%.cc
+	@mkdir -p $(obj)
 	$(compiler) -c -o $@ $(cc_flags) $<
 
 $(obj)/%.o : $(src)/%.cpp
+	@mkdir -p $(obj)
 	$(compiler) -c -o $@ $(cc_flags) $<
 
 $(units_cc) : $(headers)
