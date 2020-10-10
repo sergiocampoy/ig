@@ -1,0 +1,8 @@
+# ejecutable
+bin/*
+
+# archivos objeto
+obj/*
+
+# archivos de VScode (lo siento vimeros, os he fallado)
+.vscode/*
