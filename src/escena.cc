@@ -18,7 +18,7 @@ Escena::Escena()
 
     ejes.changeAxisSize( 5000 );
 
-   cubo = new Cubo(500);
+   cubo = new Cubo(100);
     // crear los objetos de la escena....
     // .......completar: ...
     // .....
@@ -36,6 +36,7 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 	glClearColor( 1.0, 1.0, 1.0, 1.0 );// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
 
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
+   glEnable(GL_CULL_FACE);
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
