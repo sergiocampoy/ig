@@ -31,7 +31,7 @@ class Malla3D
    // función que redibuja el objeto
    // está función llama a 'draw_ModoInmediato' (modo inmediato)
    // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
-   void draw() ;
+   void draw(bool vbo = true) ;
 
    protected:
 

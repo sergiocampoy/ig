@@ -6,6 +6,8 @@
 #include "cubo.h"
 #include "tetraedro.h"
 
+#include "menu.h"
+
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO} menu;
 class Escena
 {
@@ -38,6 +40,10 @@ class Escena
    Cubo * cubo = nullptr ; // es importante inicializarlo a 'nullptr'
    Tetraedro * tetraedro= nullptr ; // es importante inicializarlo a 'nullptr'
 
+   // variables del menú
+   unsigned int dib = DIB_ALL; // default = dibuja todo
+   unsigned int vis = VIS_SOL; // default = visualiza en modo sólido
+   bool vbo = true;            // default = dibuja en VBO
    
    public:
 

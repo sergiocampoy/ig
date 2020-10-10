@@ -82,10 +82,13 @@ void Malla3D::draw_ModoDiferido()
 // Función de visualización de la malla,
 // puede llamar a  draw_ModoInmediato o bien a draw_ModoDiferido
 
-void Malla3D::draw()
+void Malla3D::draw(bool vbo)
 {
    // completar .....(práctica 1)
-
+   if (vbo)
+      draw_ModoDiferido();
+   else
+      draw_ModoInmediato();
 }
 
 GLuint CrearVBO(GLuint tipo_vbo, GLuint size_bytes, GLvoid* puntero_ram)

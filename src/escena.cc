@@ -4,6 +4,7 @@
 #include "escena.h"
 #include "malla.h" // objetos: Cubo y otros....
 
+
 //**************************************************************************
 // constructor de la escena (no puede usar ordenes de OpenGL)
 //**************************************************************************
@@ -63,8 +64,11 @@ void Escena::dibujar()
     //   Dibujar los diferentes elementos de la escena
     // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
     // y hacer 
-   //cubo->draw_ModoInmediato();
-   cubo->draw_ModoDiferido();
+
+   if (dib & DIB_CUB)
+      cubo->draw();
+
+   
     // o
     // tetraedro.draw()
     
@@ -105,7 +109,22 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          modoMenu=SELDIBUJADO;
          break ;
          // COMPLETAR con los diferentes opciones de teclado
-            
+       case 'C' :
+         if (modoMenu == SELOBJETO)
+            dib ^= DIB_CUB;
+         break;
+       case 'T' :
+         if (modoMenu == SELOBJETO)
+            dib ^= DIB_TET;
+         break;
+       case '1' :
+         if (modoMenu == SELDIBUJADO)
+            vbo = false;
+         break;
+       case '2' :
+         if (modoMenu == SELDIBUJADO)
+            vbo = true;
+         break;
    }
    return salir;
 }
