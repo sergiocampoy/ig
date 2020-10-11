@@ -1,12 +1,6 @@
 #ifndef _MENU_H
 #define _MENU_H
 
-// selección de objeto
-#define DIB_ALL 0b11
-
-#define DIB_CUB 0b01
-#define DIB_TET 0b10
-
 // selección de modo de visualización
 #define VIS_ALL 0b1111
 

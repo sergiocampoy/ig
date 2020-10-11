@@ -84,11 +84,16 @@ void Malla3D::draw_ModoDiferido()
 
 void Malla3D::draw(bool vbo)
 {
-   // completar .....(práctica 1)
-   if (vbo)
-      draw_ModoDiferido();
-   else
-      draw_ModoInmediato();
+   if (visible) { // no dibuja si no está visible
+      if (vbo) // elige el modo de visualización
+         draw_ModoDiferido();
+      else
+         draw_ModoInmediato();
+   }
+}
+
+bool Malla3D::toggle_visibilidad() {
+   return (visible ^= true); // alterna la visibilidad
 }
 
 GLuint CrearVBO(GLuint tipo_vbo, GLuint size_bytes, GLvoid* puntero_ram)

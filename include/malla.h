@@ -33,12 +33,16 @@ class Malla3D
    // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
    void draw(bool vbo = true) ;
 
+   bool toggle_visibilidad();
+
    protected:
 
    void calcular_normales() ; // calcula tabla de normales de vértices (práctica 3)
 
    std::vector<Tupla3f> v ;   // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
    std::vector<Tupla3i> f ; // una terna de 3 enteros por cada cara o triángulo
+
+   bool visible = true;
 
    // VBOs modo diferido
    GLuint id_vbo_ver = 0, id_vbo_tri = 0; // inicializados a 0

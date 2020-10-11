@@ -19,7 +19,8 @@ Escena::Escena()
 
     ejes.changeAxisSize( 5000 );
 
-   cubo = new Cubo(100);
+   cubo = new Cubo(50);
+   tetraedro = new Tetraedro();
     // crear los objetos de la escena....
     // .......completar: ...
     // .....
@@ -65,8 +66,9 @@ void Escena::dibujar()
     // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
     // y hacer 
 
-   if (dib & DIB_CUB)
-      cubo->draw();
+   cubo->draw();
+
+   tetraedro->draw();
 
    
     // o
@@ -111,11 +113,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          // COMPLETAR con los diferentes opciones de teclado
        case 'C' :
          if (modoMenu == SELOBJETO)
-            dib ^= DIB_CUB;
+            cubo->toggle_visibilidad();
          break;
        case 'T' :
          if (modoMenu == SELOBJETO)
-            dib ^= DIB_TET;
+            tetraedro->toggle_visibilidad();
          break;
        case '1' :
          if (modoMenu == SELDIBUJADO)
