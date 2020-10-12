@@ -25,7 +25,7 @@
 class Cubo : public Malla3D
 {
    public:
-   Cubo(float l=1) ;
+   Cubo(float l=1, Tupla3f pos = Tupla3f(0, 0, 0)) ;
 
 
 } ;

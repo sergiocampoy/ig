@@ -19,7 +19,7 @@ Escena::Escena()
 
     ejes.changeAxisSize( 5000 );
 
-   cubo = new Cubo(50);
+   cubo = new Cubo(50, Tupla3f(0, 0, 0));
    tetraedro = new Tetraedro();
     // crear los objetos de la escena....
     // .......completar: ...

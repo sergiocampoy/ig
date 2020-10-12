@@ -2,18 +2,19 @@
 #include "malla.h"
 #include "cubo.h"
 
-Cubo::Cubo(float lado)
+Cubo::Cubo(float lado, Tupla3f pos)
 {
+   float x = pos[0], y = pos[1], z = pos[2];
 
    // inicializar la tabla de vértices
-   v.push_back(Tupla3f(   0,    0, lado));
-   v.push_back(Tupla3f(lado,    0, lado));
-   v.push_back(Tupla3f(   0, lado, lado));
-   v.push_back(Tupla3f(lado, lado, lado));
-   v.push_back(Tupla3f(   0,    0,    0));
-   v.push_back(Tupla3f(lado,    0,    0));
-   v.push_back(Tupla3f(   0, lado,    0));
-   v.push_back(Tupla3f(lado, lado,    0));
+   v.push_back(Tupla3f(x +    0, y +    0, z + lado));
+   v.push_back(Tupla3f(x + lado, y +    0, z + lado));
+   v.push_back(Tupla3f(x +    0, y + lado, z + lado));
+   v.push_back(Tupla3f(x + lado, y + lado, z + lado));
+   v.push_back(Tupla3f(x +    0, y +    0, z +    0));
+   v.push_back(Tupla3f(x + lado, y +    0, z +    0));
+   v.push_back(Tupla3f(x +    0, y + lado, z +    0));
+   v.push_back(Tupla3f(x + lado, y + lado, z +    0));
 
 
    // inicializar la tabla de caras o triángulos:
