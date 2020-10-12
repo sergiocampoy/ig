@@ -68,7 +68,7 @@ void Escena::dibujar()
 
    cubo->draw();
 
-   tetraedro->draw();
+   // tetraedro->draw();
 
    
     // o

@@ -32,6 +32,25 @@ Cubo::Cubo(float lado)
    f.push_back(Tupla3i(1, 4, 5));
    f.push_back(Tupla3i(2, 6, 4));
    f.push_back(Tupla3i(0, 2, 4));
+
+
+   // inicializa la tabla de colores
+   // monocromo
+   /*
+   Tupla3f color(0.8, 0.8, 0.8);
+   for (unsigned int i = 0; i < v.size(); i++) {
+      c.push_back(color);
+   }*/
+
+   // nomonocromo
+   c.push_back(Tupla3f(0, 0, 0));
+   c.push_back(Tupla3f(0, 0, 1));
+   c.push_back(Tupla3f(0, 1, 0));
+   c.push_back(Tupla3f(0, 1, 1));
+   c.push_back(Tupla3f(1, 0, 0));
+   c.push_back(Tupla3f(1, 0, 1));
+   c.push_back(Tupla3f(1, 1, 0));
+   c.push_back(Tupla3f(1, 1, 1));
    
 }
 

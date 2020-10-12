@@ -14,34 +14,20 @@ void Malla3D::draw_ModoInmediato()
   // visualizar la malla usando glDrawElements,
   // completar (práctica 1)
 
-   typedef GLfloat Real; // renombra los tipos de GL como Real y Natural
-   typedef GLuint Natural;
-   
-   const unsigned int X=0, Y=1, Z=2; // define el orden de las coordenadas
-
-   typedef Real Tupla3r[3]; // define un tipo de array de 3 reales/naturales
-   typedef Natural Tupla3n[3];
-
-   typedef struct {
-      unsigned long num_tri;
-      Tupla3r* tri;
-   } mallaTA;
-
-   mallaTA test;
-
-
-  //
   // habilita el uso de un array de vértices
   glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_COLOR_ARRAY);
   
   // indica el formato y la dirección de memoria del array de vértices
   glVertexPointer(3, GL_FLOAT, 0, v.data());
+  glColorPointer(3, GL_FLOAT, 0, c.data());
 
   // dibuja el array
   glDrawElements(GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data());
 
   // deshabilita el uso de un array de vértices
   glDisableClientState(GL_VERTEX_ARRAY);
+  glDisableClientState(GL_COLOR_ARRAY);
   
 }
 // -----------------------------------------------------------------------------
@@ -85,7 +71,7 @@ void Malla3D::draw_ModoDiferido()
 void Malla3D::draw(bool vbo)
 {
    if (visible) { // no dibuja si no está visible
-      if (vbo) // elige el modo de visualización
+      if (false /*vbo*/) // elige el modo de visualización
          draw_ModoDiferido();
       else
          draw_ModoInmediato();

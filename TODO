@@ -1,0 +1,32 @@
+
+Rúbrica P1:
+  ☐ Clase Malla3D
+  ☐ Clase Cubo
+  ☐ Clase Tetraedro
+  ☐ Dibujado en modo inmediato
+  ☐ Dibujado en modo diferido
+  ☐ Uso de ColorArray para el color
+  ☐ Visualización modo puntos
+  ☐ Visualización modo alambre
+  ✔ Visualización modo sólido @done(20-10-12 13:42)
+  ☐ Visualización modo ajedrez
+  ✔ CULL_FACE habilitado @done(20-10-12 13:42)
+  ☐ Extra: Visualiación simultánea puntos + líneas + sólido
+
+Personal P1:
+  Añadir color
+  Cambiar booleano de visibilidad de Malla3D a Escena
+
+Rúbrica P2:
+  ☐ Carga y visualiza PLY
+  ☐ Clase ObjRevolucion
+  ☐ Constructor de revolución a partir de perfil .ply
+  ☐ Constructor de revolución a partir de vector de puntos
+  ☐ Generación correcta de geometría
+  ☐ Generación correcta de topología en el sentido del ejemplo
+  ☐ Generación correcta de topología en cualquier sentido
+  ☐ Detección de existencia de tapas
+  ☐ Constructores con argumento para crear o no tapas
+  ☐ Visualización opcional de tapas en tiempo de ejecución
+  ☐ Varios objetos simultáneos en la escena
+  ☐ Extra: rotación de perfil en cualquier eje
