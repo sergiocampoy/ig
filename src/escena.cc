@@ -66,7 +66,7 @@ void Escena::dibujar()
     // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
     // y hacer 
 
-   cubo->draw();
+   cubo->draw(vbo);
 
    // tetraedro->draw();
 

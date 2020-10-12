@@ -46,7 +46,7 @@ class Malla3D
    bool visible = true;
 
    // VBOs modo diferido
-   GLuint id_vbo_ver = 0, id_vbo_tri = 0; // inicializados a 0
+   GLuint id_vbo_ver = 0, id_vbo_tri = 0, id_vbo_col = 0; // inicializados a 0
 
    // completar: tabla de colores, tabla de normales de vértices
 } ;

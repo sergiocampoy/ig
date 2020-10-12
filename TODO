@@ -5,7 +5,9 @@ Rúbrica P1:
   ☐ Clase Tetraedro
   ☐ Dibujado en modo inmediato
   ☐ Dibujado en modo diferido
-  ☐ Uso de ColorArray para el color
+  ✔ Uso de ColorArray para el color @done(20-10-12 17:16)
+    ✔ Inmediato @done(20-10-12 16:57)
+    ✔ VBO @done(20-10-12 17:16)
   ☐ Visualización modo puntos
   ☐ Visualización modo alambre
   ✔ Visualización modo sólido @done(20-10-12 13:42)

@@ -39,28 +39,37 @@ void Malla3D::draw_ModoDiferido()
    // completar (práctica 1)
    // .....
    if (id_vbo_ver == 0)
-   {
       id_vbo_ver = CrearVBO(GL_ARRAY_BUFFER, v.size()*3*sizeof(float), v.data());
-   }
 
    if (id_vbo_tri == 0)
-   {
       id_vbo_tri = CrearVBO(GL_ELEMENT_ARRAY_BUFFER, f.size()*3*sizeof(int), f.data());
-   }
+   
+   if (id_vbo_col == 0)
+      id_vbo_col = CrearVBO(GL_ARRAY_BUFFER, v.size()*3*sizeof(float), c.data());
+
+
+   // habilita los arrays de vértices y colores
+   glEnableClientState(GL_VERTEX_ARRAY); // habilita la tabla de vértices
+   glEnableClientState(GL_COLOR_ARRAY);
+
+   // enlaza el VBO de vértices
+   glBindBuffer(GL_ARRAY_BUFFER, id_vbo_ver);
+   glVertexPointer(3, GL_FLOAT, 0, 0);
+   glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+   // enlaza el VBO de colores
+   glBindBuffer(GL_ARRAY_BUFFER, id_vbo_col);
+   glColorPointer(3, GL_FLOAT, 0, 0);
+   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
    // pinta
-
-   glEnableClientState(GL_VERTEX_ARRAY); // habilita la tabla de vértices
-   glBindBuffer(GL_ARRAY_BUFFER, id_vbo_ver); // activa el VBO
-   glVertexPointer(3, GL_FLOAT, 0, 0); // enlaza el VBO
-   glBindBuffer(GL_ARRAY_BUFFER, 0); // desactiva el VBO
-   
-
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri); // activa el VBO
    glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, 0); // pinta
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // desactiva el VBO
 
+   // deshabilita los array de vértices y colores
    glDisableClientState(GL_VERTEX_ARRAY);
+   glDisableClientState(GL_COLOR_ARRAY);
 
 
 }
@@ -71,7 +80,7 @@ void Malla3D::draw_ModoDiferido()
 void Malla3D::draw(bool vbo)
 {
    if (visible) { // no dibuja si no está visible
-      if (false /*vbo*/) // elige el modo de visualización
+      if (vbo) // elige el modo de visualización
          draw_ModoDiferido();
       else
          draw_ModoInmediato();
