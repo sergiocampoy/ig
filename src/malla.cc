@@ -9,10 +9,8 @@
 
 // Visualización en modo inmediato con 'glDrawElements'
 
-void Malla3D::draw_ModoInmediato()
+void Malla3D::draw_ModoInmediato(unsigned int modo_vis)
 {
-  // visualizar la malla usando glDrawElements,
-  // completar (práctica 1)
 
   // habilita el uso de un array de vértices
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -33,11 +31,8 @@ void Malla3D::draw_ModoInmediato()
 // -----------------------------------------------------------------------------
 // Visualización en modo diferido con 'glDrawElements' (usando VBOs)
 
-void Malla3D::draw_ModoDiferido()
+void Malla3D::draw_ModoDiferido(unsigned int modo_vis)
 {
-   // (la primera vez, se deben crear los VBOs y guardar sus identificadores en el objeto)
-   // completar (práctica 1)
-   // .....
    if (id_vbo_ver == 0)
       id_vbo_ver = CrearVBO(GL_ARRAY_BUFFER, v.size()*3*sizeof(float), v.data());
 
@@ -77,18 +72,12 @@ void Malla3D::draw_ModoDiferido()
 // Función de visualización de la malla,
 // puede llamar a  draw_ModoInmediato o bien a draw_ModoDiferido
 
-void Malla3D::draw(bool vbo)
+void Malla3D::draw(unsigned int modo_vis, bool vbo)
 {
-   if (visible) { // no dibuja si no está visible
-      if (vbo) // elige el modo de visualización
-         draw_ModoDiferido();
-      else
-         draw_ModoInmediato();
-   }
-}
-
-bool Malla3D::toggle_visibilidad() {
-   return (visible ^= true); // alterna la visibilidad
+   if (vbo) // elige el modo de visualización
+      draw_ModoDiferido(modo_vis);
+   else
+      draw_ModoInmediato(modo_vis);
 }
 
 GLuint CrearVBO(GLuint tipo_vbo, GLuint size_bytes, GLvoid* puntero_ram)

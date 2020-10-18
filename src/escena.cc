@@ -66,7 +66,8 @@ void Escena::dibujar()
     // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
     // y hacer 
 
-   cubo->draw(vbo);
+   if (obj & OBJ_CUB)
+      cubo->draw(obj, vbo);
 
    // tetraedro->draw();
 
@@ -92,41 +93,147 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
    switch( toupper(tecla) )
    {
       case 'Q' :
-         if (modoMenu!=NADA)
-            modoMenu=NADA;            
+         if (modoMenu!=NADA) {
+            modoMenu=NADA;
+            help(modoMenu);
+         }
          else {
             salir=true ;
          }
-         break ;
+      break ;
       case 'O' :
          // ESTAMOS EN MODO SELECCION DE OBJETO
-         modoMenu=SELOBJETO; 
-         break ;
-        case 'V' :
+         modoMenu=SELOBJETO;
+         help(modoMenu);
+      break ;
+      case 'V' :
          // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
          modoMenu=SELVISUALIZACION;
-         break ;
-       case 'D' :
+         help(modoMenu);
+      break ;
+      case 'D' :
          // ESTAMOS EN MODO SELECCION DE DIBUJADO
          modoMenu=SELDIBUJADO;
-         break ;
-         // COMPLETAR con los diferentes opciones de teclado
-       case 'C' :
-         if (modoMenu == SELOBJETO)
-            cubo->toggle_visibilidad();
-         break;
-       case 'T' :
-         if (modoMenu == SELOBJETO)
-            tetraedro->toggle_visibilidad();
-         break;
-       case '1' :
-         if (modoMenu == SELDIBUJADO)
+         help(modoMenu);
+      break ;
+      
+      // OPCIONES DE SELECCIÓN DE OBJETO
+      case 'C' :
+         if (modoMenu == SELOBJETO) {
+            obj ^= OBJ_CUB; // Alterna visibilidad
+            if (obj & OBJ_CUB) {
+               cout << "Cubo " << FGRN("activado") << endl;
+            } else {
+               cout << "Cubo " << FRED("desactivado") << endl;
+            }
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
+      break;
+      case 'T' :
+         if (modoMenu == SELOBJETO) {
+            obj ^= OBJ_TET; // Alterna visibilidad
+            if (obj & OBJ_TET) {
+               cout << "Tetraedro " << FGRN("activado") << endl;
+            } else {
+               cout << "Tetraedro " << FRED("desactivado") << endl;
+            }
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
+      break;
+
+      // OPCIONES DE SELECCIÓN DE MODO DE VISUALIZACIÓN
+      case 'P' :
+         if (modoMenu == SELVISUALIZACION) {
+            vis ^= VIS_PUN; // Alterna estado
+            if (vis & VIS_PUN) {
+               cout << "Modo puntos " << FGRN("activado") << endl;
+            } else {
+               cout << "Modo puntos " << FRED("desactivado") << endl;
+            }
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
+      break;
+      case 'L' :
+         if (modoMenu == SELVISUALIZACION) {
+            vis ^= VIS_LIN; // Alterna estado
+            if (vis & VIS_LIN) {
+               cout << "Modo lineas " << FGRN("activado") << endl;
+            } else {
+               cout << "Modo lineas " << FRED("desactivado") << endl;
+            }
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
+      break;
+      case 'S' :
+         if (modoMenu == SELVISUALIZACION) {
+            vis ^= VIS_SOL; // Alterna estado
+            if (vis & VIS_SOL) {
+               cout << "Modo sólido " << FGRN("activado") << endl;
+            } else {
+               cout << "Modo sólido " << FRED("desactivado") << endl;
+            }
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
+      break;
+      case 'A' :
+         if (modoMenu == SELVISUALIZACION) {
+            vis ^= VIS_AJE; // Alterna estado
+            if (vis & VIS_AJE) {
+               cout << "Modo ajedrez " << FGRN("activado") << endl;
+            } else {
+               cout << "Modo ajedrez " << FRED("desactivado") << endl;
+            }
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
+      break;
+
+      // OPCIONES DE SELECCIÓN DE MODO DE DIBUJADO
+      case '1' :
+         if (modoMenu == SELDIBUJADO) {
             vbo = false;
-         break;
-       case '2' :
-         if (modoMenu == SELDIBUJADO)
+            cout << "Modo inmediato " << FGRN("activado") << endl;
+            cout << "Modo diferido " << FRED("desactivado") << endl;
+            cout << endl;
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
+      break;
+      case '2' :
+         if (modoMenu == SELDIBUJADO) {
             vbo = true;
-         break;
+            cout << "Modo diferido " << FRED("activado") << endl;
+            cout << "Modo inmediato " << FGRN("desactivado") << endl;
+            cout << endl;
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
+      break;
+      case 'H' :
+         // AYUDA
+         help(modoMenu);
+      break;
+      case 'I' :
+         // INFO
+         info(obj, vis, vbo);
+      break;
+      default:
+         cout << FRED("Opción inválida.") << endl;
+         help(modoMenu);
+      break;
    }
    return salir;
 }
@@ -197,4 +304,107 @@ void Escena::change_observer()
    glTranslatef( 0.0, 0.0, -Observer_distance );
    glRotatef( Observer_angle_y, 0.0 ,1.0, 0.0 );
    glRotatef( Observer_angle_x, 1.0, 0.0, 0.0 );
+}
+
+
+// Función de ayuda
+
+void Escena::help(menu modoMenu)
+{
+   switch (modoMenu)
+   {
+      case NADA:
+         printf(
+            BOLD(FBLU("Menú principal:\n"))
+            "H - Muestra este menú\n"
+            "I - Información de la escena\n"
+            "Q - Salir\n"
+            "O - Selección de objeto\n"
+            "V - Selección de modo de visualización\n"
+            "D - Selección de modo de dibujado\n"
+         );
+      break;
+      case SELOBJETO:
+         printf(
+            BOLD(FBLU("Selección de objeto\n"))
+            "H - Muestra este menú\n"
+            "I - Información de la escena\n"
+            "Q - Volver al menú principal\n"
+            "C - Activar/desactivar cubo\n"
+            "T - Activar/desactivar tetraedro\n"
+         );
+      break;
+      case SELVISUALIZACION:
+         printf(
+            BOLD(FBLU("Selección de modo de visualización\n"))
+            "H - Muestra este menú\n"
+            "I - Información de la escena\n"
+            "Q - Volver al menú principal\n"
+            "P - Activar/desactivar modo puntos\n"
+            "L - Activar/desactivar modo línea\n"
+            "S - Activar/desactivar modo sólido (default)\n"
+            "A - Activar/desactivar modo ajedrez\n"
+         );
+      break;
+      case SELDIBUJADO:
+         printf(
+            BOLD(FBLU("Selección de modo de dibujado\n"))
+            "H - Muestra este menú\n"
+            "I - Información de la escena\n"
+            "Q - Volver al menú principal\n"
+            "1 - Visualizar mediante glDrawElements\n"
+            "2 - Visualizar mediante VBOs\n"
+         );
+      break;
+   }
+   printf("\n");
+}
+
+void Escena::info(unsigned int obj, unsigned int vis, bool vbo)
+{
+   using namespace std;
+
+   cout
+     << BOLD(FBLU("Información de la escena.")) << endl
+     << FBLU("Objetos") << endl
+
+     << "\tCubo:\t\t"
+     << ((obj & OBJ_CUB) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tTetraedro:\t"
+     << ((obj & OBJ_TET) ? FGRN("si") : FRED("no"))
+     << endl
+
+
+     << endl << FBLU("Modo de visualización") << endl
+
+     << "\tModo puntos:\t"
+     << ((vis & VIS_PUN) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tModo líneas:\t"
+     << ((vis & VIS_LIN) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tModo sólido:\t"
+     << ((vis & VIS_SOL) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tModo ajedrez:\t"
+     << ((vis & VIS_AJE) ? FGRN("si") : FRED("no"))
+     << endl
+
+
+     << endl << FBLU("Modo de dibujado") << endl
+
+     << "\tModo inmediato:\t"
+     << (!vbo ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tModo diferido:\t"
+     << (vbo ? FGRN("si") : FRED("no"))
+     << endl
+
+     << endl;
 }
