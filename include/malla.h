@@ -41,8 +41,13 @@ class Malla3D
    std::vector<Tupla3i> f ; // una terna de 3 enteros por cada cara o triángulo
    std::vector<Tupla3f> c ; // tabla de colores de los vértices (una tupla por vértice, con tres floats)
 
+   std::vector<Tupla3f> c_p; // colores modo puntos
+   std::vector<Tupla3f> c_l; // colores modo líneas
+   std::vector<Tupla3f> c_s; // colores modo sólido
+
    // VBOs modo diferido
    GLuint id_vbo_ver = 0, id_vbo_tri = 0, id_vbo_col = 0; // inicializados a 0
+   GLuint id_vbo_col_pun = 0, id_vbo_col_lin = 0, id_vbo_col_sol = 0;
 
    // completar: tabla de colores, tabla de normales de vértices
 } ;

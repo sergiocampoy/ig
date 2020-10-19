@@ -1,5 +1,6 @@
 #include "aux.h"
 #include "malla.h"
+#include "menu.h"
 
 // *****************************************************************************
 //
@@ -11,28 +12,67 @@
 
 void Malla3D::draw_ModoInmediato(unsigned int modo_vis)
 {
+   // inicial
+/*
+   // habilita el uso de un array de vértices
+   glEnableClientState(GL_VERTEX_ARRAY);
+   glEnableClientState(GL_COLOR_ARRAY);
 
-  // habilita el uso de un array de vértices
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glEnableClientState(GL_COLOR_ARRAY);
-  
-  // indica el formato y la dirección de memoria del array de vértices
-  glVertexPointer(3, GL_FLOAT, 0, v.data());
-  glColorPointer(3, GL_FLOAT, 0, c.data());
+   // indica el formato y la dirección de memoria del array de vértices
+   glVertexPointer(3, GL_FLOAT, 0, v.data());
+   glColorPointer(3, GL_FLOAT, 0, c.data());
 
-  // dibuja el array
-  glDrawElements(GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data());
+   // dibuja el array
+   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+   glDrawElements(GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data());
 
-  // deshabilita el uso de un array de vértices
-  glDisableClientState(GL_VERTEX_ARRAY);
-  glDisableClientState(GL_COLOR_ARRAY);
-  
+   // deshabilita el uso de un array de vértices
+   glDisableClientState(GL_VERTEX_ARRAY);
+   glDisableClientState(GL_COLOR_ARRAY);
+*/
+
+   // new
+   
+   glEnableClientState(GL_VERTEX_ARRAY);
+   glEnableClientState(GL_COLOR_ARRAY);
+   glVertexPointer(3, GL_FLOAT, 0, v.data());
+
+   // modo puntos
+   if (modo_vis & VIS_PUN)
+   {
+      glPointSize(5);
+
+      glPolygonMode(GL_FRONT, GL_POINT);
+      glColorPointer(3, GL_FLOAT, 0, c_p.data());
+      glDrawElements(GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data());
+   }
+
+   // modo líneas
+   if (modo_vis & VIS_LIN) {
+      glPolygonMode(GL_FRONT, GL_LINE);
+      glColorPointer(3, GL_FLOAT, 0, c_l.data());
+      glDrawElements(GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data());
+   }
+
+   // modo sólido
+   if (modo_vis & VIS_SOL) {
+      glPolygonMode(GL_FRONT, GL_FILL);
+      glColorPointer(3, GL_FLOAT, 0, c_s.data());
+      glDrawElements(GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data());
+   }
+
+   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // lo deja como estaba
+
+   glDisableClientState(GL_VERTEX_ARRAY);
+   glDisableClientState(GL_COLOR_ARRAY);
+
 }
 // -----------------------------------------------------------------------------
 // Visualización en modo diferido con 'glDrawElements' (usando VBOs)
 
 void Malla3D::draw_ModoDiferido(unsigned int modo_vis)
 {
+   // Crea los VBOs (solo la primera vez que se llama a la función)
    if (id_vbo_ver == 0)
       id_vbo_ver = CrearVBO(GL_ARRAY_BUFFER, v.size()*3*sizeof(float), v.data());
 
@@ -41,31 +81,71 @@ void Malla3D::draw_ModoDiferido(unsigned int modo_vis)
    
    if (id_vbo_col == 0)
       id_vbo_col = CrearVBO(GL_ARRAY_BUFFER, v.size()*3*sizeof(float), c.data());
-
-
-   // habilita los arrays de vértices y colores
-   glEnableClientState(GL_VERTEX_ARRAY); // habilita la tabla de vértices
+   
+   if (id_vbo_col_pun == 0)
+      id_vbo_col_pun = CrearVBO(GL_ARRAY_BUFFER, v.size()*3*sizeof(float), c_p.data());
+   
+   if (id_vbo_col_lin == 0)
+      id_vbo_col_lin = CrearVBO(GL_ARRAY_BUFFER, v.size()*3*sizeof(float), c_l.data());
+   
+   if (id_vbo_col_sol == 0)
+      id_vbo_col_sol = CrearVBO(GL_ARRAY_BUFFER, v.size()*3*sizeof(float), c_s.data());
+   
+   // inicializa array de vértices y color
+   glEnableClientState(GL_VERTEX_ARRAY);
    glEnableClientState(GL_COLOR_ARRAY);
 
-   // enlaza el VBO de vértices
+   // enlaza array de vértices
    glBindBuffer(GL_ARRAY_BUFFER, id_vbo_ver);
    glVertexPointer(3, GL_FLOAT, 0, 0);
    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-   // enlaza el VBO de colores
-   glBindBuffer(GL_ARRAY_BUFFER, id_vbo_col);
-   glColorPointer(3, GL_FLOAT, 0, 0);
-   glBindBuffer(GL_ARRAY_BUFFER, 0);
+   // modo puntos
+   if (modo_vis & VIS_PUN)
+   {
+      glPointSize(5);
+      glPolygonMode(GL_FRONT, GL_POINT);
 
-   // pinta
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri); // activa el VBO
-   glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, 0); // pinta
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // desactiva el VBO
+      glBindBuffer(GL_ARRAY_BUFFER, id_vbo_col_pun);
+      glColorPointer(3, GL_FLOAT, 0, 0);
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+   
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri); // activa el VBO
+      glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, 0); // pinta
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // desactiva el VBO
+   }
 
-   // deshabilita los array de vértices y colores
+   // modo lineas
+   if (modo_vis & VIS_LIN)
+   {
+      glPolygonMode(GL_FRONT, GL_LINE);
+
+      glBindBuffer(GL_ARRAY_BUFFER, id_vbo_col_lin);
+      glColorPointer(3, GL_FLOAT, 0, 0);
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+   
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri); // activa el VBO
+      glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, 0); // pinta
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // desactiva el VBO
+   }
+
+   // modo sólido
+   if (modo_vis & VIS_SOL)
+   {
+      glPolygonMode(GL_FRONT, GL_FILL);
+
+      glBindBuffer(GL_ARRAY_BUFFER, id_vbo_col_sol);
+      glColorPointer(3, GL_FLOAT, 0, 0);
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+   
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri); // activa el VBO
+      glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, 0); // pinta
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // desactiva el VBO
+   }
+
+   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
    glDisableClientState(GL_VERTEX_ARRAY);
    glDisableClientState(GL_COLOR_ARRAY);
-
 
 }
 // -----------------------------------------------------------------------------

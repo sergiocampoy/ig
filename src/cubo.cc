@@ -37,12 +37,20 @@ Cubo::Cubo(float lado, Tupla3f pos)
 
    // inicializa la tabla de colores
    // monocromo
-   /*
-   Tupla3f color(0.8, 0.8, 0.8);
+   
+   // color sólido
+   Tupla3f c_solido(0.8, 0.8, 0.8);
    for (unsigned int i = 0; i < v.size(); i++) {
-      c.push_back(color);
-   }*/
+      c_s.push_back(c_solido);
+   }
 
+   // color línea
+   Tupla3f c_linea(0, 1, 0);
+   for (unsigned int i = 0; i < v.size(); i++) {
+      c_l.push_back(c_linea);
+   }
+
+   /*
    // nomonocromo
    c.push_back(Tupla3f(0, 0, 0));
    c.push_back(Tupla3f(0, 0, 1));
@@ -52,6 +60,13 @@ Cubo::Cubo(float lado, Tupla3f pos)
    c.push_back(Tupla3f(1, 0, 1));
    c.push_back(Tupla3f(1, 1, 0));
    c.push_back(Tupla3f(1, 1, 1));
-   
+   */
+
+   // color modo puntos
+   Tupla3f c_puntos(1, 0, 0); // Rojo
+   for (unsigned int i = 0; i < v.size(); i++) {
+      c_p.push_back(c_puntos);
+   }
+
 }
 
