@@ -43,7 +43,8 @@ class Escena
    // menú
    void help(menu modoMenu);
    void info(unsigned int obj, unsigned int vis, bool vbo);
-   unsigned int obj = OBJ_ALL; // default = visualiza todos los objs
+   // unsigned int obj = OBJ_ALL; // default = visualiza todos los objs
+   unsigned int obj = OBJ_TET;
    unsigned int vis = VIS_SOL; // default = visualiza en modo sólido
    bool vbo = true;            // default = dibuja en VBO
    

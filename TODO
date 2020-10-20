@@ -2,7 +2,7 @@
 Rúbrica P1:
   ✔ Clase Malla3D @done(20-10-20 23:25)
   ✔ Clase Cubo @done(20-10-20 23:25)
-  ☐ Clase Tetraedro
+  ✔ Clase Tetraedro @done(20-10-21 00:06)
   ✔ Dibujado en modo inmediato @done(20-10-20 23:25)
   ✔ Dibujado en modo diferido @done(20-10-20 23:25)
   ✔ Uso de ColorArray para el color @done(20-10-12 17:16)
@@ -18,7 +18,7 @@ Rúbrica P1:
 Personal P1:
   ✔ Modo ajedrez usando los colores de líneas y puntos @done(20-10-20 23:25)
   ✔ Modo ajedrez diferido @done(20-10-20 23:25)
-  ☐ Tetraedro en condiciones
+  ✔ Tetraedro en condiciones @done(20-10-21 00:06)
 
 Rúbrica P2:
   ☐ Carga y visualiza PLY

@@ -69,7 +69,8 @@ void Escena::dibujar()
    if (obj & OBJ_CUB)
       cubo->draw(vis, vbo);
 
-   // tetraedro->draw();
+   if (obj & OBJ_TET)
+      tetraedro->draw(vis, vbo);
 
    
     // o
