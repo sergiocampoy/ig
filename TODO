@@ -1,23 +1,24 @@
 
 Rúbrica P1:
-  ☐ Clase Malla3D
-  ☐ Clase Cubo
+  ✔ Clase Malla3D @done(20-10-20 23:25)
+  ✔ Clase Cubo @done(20-10-20 23:25)
   ☐ Clase Tetraedro
-  ☐ Dibujado en modo inmediato
-  ☐ Dibujado en modo diferido
+  ✔ Dibujado en modo inmediato @done(20-10-20 23:25)
+  ✔ Dibujado en modo diferido @done(20-10-20 23:25)
   ✔ Uso de ColorArray para el color @done(20-10-12 17:16)
     ✔ Inmediato @done(20-10-12 16:57)
     ✔ VBO @done(20-10-12 17:16)
-  ☐ Visualización modo puntos
-  ☐ Visualización modo alambre
+  ✔ Visualización modo puntos @done(20-10-20 23:25)
+  ✔ Visualización modo alambre @done(20-10-20 23:25)
   ✔ Visualización modo sólido @done(20-10-12 13:42)
-  ☐ Visualización modo ajedrez
+  ✔ Visualización modo ajedrez @done(20-10-20 23:25)
   ✔ CULL_FACE habilitado @done(20-10-12 13:42)
-  ☐ Extra: Visualiación simultánea puntos + líneas + sólido
+  ✔ Extra: Visualiación simultánea puntos + líneas + sólido @done(20-10-20 23:25)
 
 Personal P1:
-  ☐ Añadir color
-  ☐ Cambiar booleano de visibilidad de Malla3D a Escena
+  ✔ Modo ajedrez usando los colores de líneas y puntos @done(20-10-20 23:25)
+  ✔ Modo ajedrez diferido @done(20-10-20 23:25)
+  ☐ Tetraedro en condiciones
 
 Rúbrica P2:
   ☐ Carga y visualiza PLY
