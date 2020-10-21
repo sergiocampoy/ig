@@ -12,26 +12,6 @@
 
 void Malla3D::draw_ModoInmediato(unsigned int modo_vis)
 {
-   // inicial
-/*
-   // habilita el uso de un array de vértices
-   glEnableClientState(GL_VERTEX_ARRAY);
-   glEnableClientState(GL_COLOR_ARRAY);
-
-   // indica el formato y la dirección de memoria del array de vértices
-   glVertexPointer(3, GL_FLOAT, 0, v.data());
-   glColorPointer(3, GL_FLOAT, 0, c.data());
-
-   // dibuja el array
-   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-   glDrawElements(GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data());
-
-   // deshabilita el uso de un array de vértices
-   glDisableClientState(GL_VERTEX_ARRAY);
-   glDisableClientState(GL_COLOR_ARRAY);
-*/
-
-   // new
    
    glEnableClientState(GL_VERTEX_ARRAY);
    glEnableClientState(GL_COLOR_ARRAY);
@@ -40,18 +20,26 @@ void Malla3D::draw_ModoInmediato(unsigned int modo_vis)
    // modo puntos
    if (modo_vis & VIS_PUN)
    {
+      glDisable(GL_CULL_FACE);
+
       glPointSize(5);
 
-      glPolygonMode(GL_FRONT, GL_POINT);
+      glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
       glColorPointer(3, GL_FLOAT, 0, c_p.data());
       glDrawElements(GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data());
+
+      glEnable(GL_CULL_FACE);
    }
 
    // modo líneas
    if (modo_vis & VIS_LIN) {
-      glPolygonMode(GL_FRONT, GL_LINE);
+      glDisable(GL_CULL_FACE);
+      
+      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
       glColorPointer(3, GL_FLOAT, 0, c_l.data());
       glDrawElements(GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data());
+
+      glEnable(GL_CULL_FACE);
    }
 
    // modo sólido
@@ -61,12 +49,6 @@ void Malla3D::draw_ModoInmediato(unsigned int modo_vis)
       glDrawElements(GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data());
    }
 
-   /*
-   if (modo_vis & VIS_AJE)
-   {
-      draw_ModoInmediato_Ajedrez();
-   }
-   */
 
    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // lo deja como estaba
 
@@ -111,7 +93,8 @@ void Malla3D::draw_ModoDiferido(unsigned int modo_vis)
    if (modo_vis & VIS_PUN)
    {
       glPointSize(5);
-      glPolygonMode(GL_FRONT, GL_POINT);
+      glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+      glDisable(GL_CULL_FACE);
 
       glBindBuffer(GL_ARRAY_BUFFER, id_vbo_col_pun);
       glColorPointer(3, GL_FLOAT, 0, 0);
@@ -120,12 +103,15 @@ void Malla3D::draw_ModoDiferido(unsigned int modo_vis)
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri); // activa el VBO
       glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, 0); // pinta
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // desactiva el VBO
+
+      glEnable(GL_CULL_FACE);
    }
 
    // modo lineas
    if (modo_vis & VIS_LIN)
    {
-      glPolygonMode(GL_FRONT, GL_LINE);
+      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+      glDisable(GL_CULL_FACE);
 
       glBindBuffer(GL_ARRAY_BUFFER, id_vbo_col_lin);
       glColorPointer(3, GL_FLOAT, 0, 0);
@@ -134,6 +120,8 @@ void Malla3D::draw_ModoDiferido(unsigned int modo_vis)
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri); // activa el VBO
       glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, 0); // pinta
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // desactiva el VBO
+      
+      glEnable(GL_CULL_FACE);
    }
 
    // modo sólido

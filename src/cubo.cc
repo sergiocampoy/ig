@@ -17,10 +17,7 @@ Cubo::Cubo(float lado, Tupla3f pos)
    v.push_back(Tupla3f(x + lado, y + lado, z +    0));
 
 
-   // inicializar la tabla de caras o triángulos:
-   // (es importante en cada cara ordenar los vértices en sentido contrario
-   //  de las agujas del reloj, cuando esa cara se observa desde el exterior del cubo)
-
+   // tabla de caras
    f.push_back(Tupla3i(0, 1, 2));
    f.push_back(Tupla3i(1, 3, 2));
    f.push_back(Tupla3i(2, 3, 7));
@@ -35,9 +32,6 @@ Cubo::Cubo(float lado, Tupla3f pos)
    f.push_back(Tupla3i(0, 2, 4));
 
 
-   // inicializa la tabla de colores
-   // monocromo
-   
    // color sólido
    Tupla3f c_solido(0.8, 0.8, 0.8);
    for (unsigned int i = 0; i < v.size(); i++) {
@@ -50,23 +44,10 @@ Cubo::Cubo(float lado, Tupla3f pos)
       c_l.push_back(c_linea);
    }
 
-   /*
-   // nomonocromo
-   c.push_back(Tupla3f(0, 0, 0));
-   c.push_back(Tupla3f(0, 0, 1));
-   c.push_back(Tupla3f(0, 1, 0));
-   c.push_back(Tupla3f(0, 1, 1));
-   c.push_back(Tupla3f(1, 0, 0));
-   c.push_back(Tupla3f(1, 0, 1));
-   c.push_back(Tupla3f(1, 1, 0));
-   c.push_back(Tupla3f(1, 1, 1));
-   */
-
    // color modo puntos
    Tupla3f c_puntos(1, 0, 0); // Rojo
    for (unsigned int i = 0; i < v.size(); i++) {
       c_p.push_back(c_puntos);
    }
-
 }
 

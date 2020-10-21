@@ -20,7 +20,7 @@ Escena::Escena()
     ejes.changeAxisSize( 5000 );
 
    cubo = new Cubo(50, Tupla3f(0, 0, 0));
-   tetraedro = new Tetraedro();
+   tetraedro = new Tetraedro(50);
     // crear los objetos de la escena....
     // .......completar: ...
     // .....
@@ -35,7 +35,9 @@ Escena::Escena()
 
 void Escena::inicializar( int UI_window_width, int UI_window_height )
 {
-	glClearColor( 1.0, 1.0, 1.0, 1.0 );// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
+	//glClearColor( 1.0, 1.0, 1.0, 1.0 );// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
+   // #f8f8f2
+   glClearColor( 40.0/255, 42.0/255, 54.0/255, 1.0); // #DarkModeEverything
 
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
    glEnable(GL_CULL_FACE);
