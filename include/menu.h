@@ -2,10 +2,11 @@
 #define _MENU_H
 
 // selección de objeto
-#define OBJ_ALL 0b11
+#define OBJ_ALL 0b111
 
-#define OBJ_CUB 0b01
-#define OBJ_TET 0b10
+#define OBJ_CUB 0b001
+#define OBJ_TET 0b010
+#define OBJ_ANT 0b100
 
 
 // selección de modo de visualización

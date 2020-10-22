@@ -19,10 +19,10 @@ Personal P1:
   ✔ Modo ajedrez usando los colores de líneas y puntos @done(20-10-20 23:25)
   ✔ Modo ajedrez diferido @done(20-10-20 23:25)
   ✔ Tetraedro en condiciones @done(20-10-21 00:06)
-  ☐ Comprobar que los lados del tetraedro miden lo mismo
+  ✔ Comprobar que los lados del tetraedro miden lo mismo @done(20-10-22 20:44)
 
 Rúbrica P2:
-  ☐ Carga y visualiza PLY
+  ✔ Carga y visualiza PLY @done(20-10-22 20:45)
   ☐ Clase ObjRevolucion
   ☐ Constructor de revolución a partir de perfil .ply
   ☐ Constructor de revolución a partir de vector de puntos

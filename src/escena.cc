@@ -21,6 +21,7 @@ Escena::Escena()
 
    cubo = new Cubo(50, Tupla3f(0, 0, 0));
    tetraedro = new Tetraedro(50);
+   hormiga = new ObjPLY("./plys/big_dodge.ply");
     // crear los objetos de la escena....
     // .......completar: ...
     // .....
@@ -36,7 +37,6 @@ Escena::Escena()
 void Escena::inicializar( int UI_window_width, int UI_window_height )
 {
 	//glClearColor( 1.0, 1.0, 1.0, 1.0 );// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
-   // #f8f8f2
    glClearColor( 40.0/255, 42.0/255, 54.0/255, 1.0); // #DarkModeEverything
 
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
@@ -74,6 +74,8 @@ void Escena::dibujar()
    if (obj & OBJ_TET)
       tetraedro->draw(vis, vbo);
 
+   if (obj & OBJ_ANT)
+      hormiga->draw(vis, vbo);
    
     // o
     // tetraedro.draw()
@@ -171,8 +173,15 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                cout << "Modo lineas " << FRED("desactivado") << endl;
             }
          } else {
+            light_mode = !light_mode;
+            if (light_mode)
+               glClearColor( 1.0, 1.0, 1.0, 1.0 );
+            else
+               glClearColor( 40.0/255, 42.0/255, 54.0/255, 1.0); // #DarkModeEverything
+            /*
             cout << FRED("Opción inválida") << endl;
             help(modoMenu);
+            */
          }
       break;
       case 'S' :
