@@ -24,8 +24,8 @@ Personal P1:
 Rúbrica P2:
   ✔ Carga y visualiza PLY @done(20-10-22 20:45)
   ☐ Clase ObjRevolucion
-  ☐ Constructor de revolución a partir de perfil .ply
-  ☐ Constructor de revolución a partir de vector de puntos
+  ✔ Constructor de revolución a partir de perfil .ply @done(20-10-25 12:43)
+  ✔ Constructor de revolución a partir de vector de puntos @done(20-10-25 12:43)
   ☐ Generación correcta de geometría
   ☐ Generación correcta de topología en el sentido del ejemplo
   ☐ Generación correcta de topología en cualquier sentido

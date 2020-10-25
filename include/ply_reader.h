@@ -80,6 +80,18 @@ void read_vertices
    std::vector<Tupla3f> & vertices            // salida:  vector de coords. de vert.
 );
 
+
+void abrir_archivo( std::string & nombre_archivo, std::ifstream & src ) ;
+void leer_cabecera( std::ifstream & src,
+                    unsigned & num_vertices, unsigned & num_caras,
+                    const bool lee_num_caras ) ;
+void error( const char *msg_error ) ;
+void leer_vertices(  unsigned num_vertices, std::vector<Tupla3f> & vertices,
+                     std::ifstream & src  ) ;
+void leer_caras( unsigned num_vertices,
+                 unsigned num_caras, std::vector<Tupla3i> & caras,
+                 std::ifstream & src  ) ;
+
 } ; // fin namespace ply
 
 #endif // _PLY_H

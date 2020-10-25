@@ -6,6 +6,7 @@
 #include "cubo.h"
 #include "tetraedro.h"
 #include "objply.h"
+#include "objrevolucion.h"
 
 #include "menu.h"
 
@@ -40,13 +41,14 @@ class Escena
    Ejes ejes;
    Cubo * cubo = nullptr ; // es importante inicializarlo a 'nullptr'
    Tetraedro * tetraedro= nullptr ; // es importante inicializarlo a 'nullptr'
-   ObjPLY * hormiga = nullptr;
+   ObjPLY * ply = nullptr;
+   ObjRevolucion* rev = nullptr;
 
    // menú
    void help(menu modoMenu);
    void info(unsigned int obj, unsigned int vis, bool vbo);
    // unsigned int obj = OBJ_ALL; // default = visualiza todos los objs
-   unsigned int obj = OBJ_ANT;
+   unsigned int obj = OBJ_ALL;
    unsigned int vis = VIS_SOL; // default = visualiza en modo sólido
    bool vbo = true;            // default = dibuja en VBO
    bool light_mode = false;

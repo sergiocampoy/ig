@@ -50,16 +50,7 @@ using namespace std ;
 const streamsize tam_buffer = streamsize(10L)*streamsize(1024L) ;
 
 
-void abrir_archivo( string & nombre_archivo, ifstream & src ) ;
-void leer_cabecera( ifstream & src,
-                    unsigned & num_vertices, unsigned & num_caras,
-                    const bool lee_num_caras ) ;
-void error( const char *msg_error ) ;
-void leer_vertices(  unsigned num_vertices, vector<Tupla3f> & vertices,
-                     ifstream & src  ) ;
-void leer_caras( unsigned num_vertices,
-                 unsigned num_caras, vector<Tupla3i> & caras,
-                 ifstream & src  ) ;
+
 
 //**********************************************************************
 

@@ -283,3 +283,23 @@ void Malla3D::draw_ModoDiferido_Ajedrez()
    glDisableClientState(GL_VERTEX_ARRAY);
    glDisableClientState(GL_COLOR_ARRAY);
 }
+
+void Malla3D::colorea()
+{
+   // colores
+   Tupla3f c_solido(0.8f, 0.8f, 0.8f); // Gris
+   Tupla3f c_linea (0.0f, 1.0f, 0.0f); // Verde
+   Tupla3f c_puntos(1.0f, 0.0f, 0.0f); // Rojo
+
+   // color sólido
+   for (unsigned int i = 0; i < v.size(); i++)
+      c_s.push_back(c_solido);
+
+   // color línea
+   for (unsigned int i = 0; i < v.size(); i++)
+      c_l.push_back(c_linea);
+
+   // color puntos
+   for (unsigned int i = 0; i < v.size(); i++)
+      c_p.push_back(c_puntos);
+}
