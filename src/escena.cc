@@ -22,7 +22,7 @@ Escena::Escena()
    cubo = new Cubo(50, Tupla3f(0, 0, 0));
    tetraedro = new Tetraedro(50);
    ply = new ObjPLY("./plys/big_dodge.ply");
-   rev = new ObjRevolucion("./plys/lata-pinf.ply", 4);
+   rev = new ObjRevolucion("./plys/peon.ply", 16);
     // crear los objetos de la escena....
     // .......completar: ...
     // .....
@@ -79,7 +79,7 @@ void Escena::dibujar()
       ply->draw(vis, vbo);
 
    if (obj & OBJ_REV)
-      rev->draw(vis, vbo);
+      rev->draw(vis, vbo, true);
    
     
 }
@@ -186,7 +186,15 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          help(modoMenu);
       break;
       case 'P':
-         if (modoMenu == SELOBJETO) {
+         if (modoMenu == SELVISUALIZACION) {
+            // Activa/desactiva modo ajedrez
+            vis ^= VIS_PUN;
+            if (vis & VIS_PUN) {
+               cout << "Modo puntos " << FGRN("activado") << endl;
+            } else {
+               cout << "Modo puntos " << FRED("desactivado") << endl;
+            }
+         } else if (modoMenu == SELOBJETO) {
             // Activa/desactiva PLY
             obj ^= OBJ_PLY;
             if (obj & OBJ_PLY) {
