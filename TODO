@@ -34,3 +34,13 @@ Rúbrica P2:
   ✔ Visualización opcional de tapas en tiempo de ejecución @done(20-11-09 13:36)
   ✔ Varios objetos simultáneos en la escena @done(20-11-09 13:36)
   ✔ Extra: rotación de perfil en cualquier eje @done(20-11-09 13:36)
+
+Rúbrica P3:
+  ☐ Cálculo correcto de las normales en los vértices
+  ☐ Los ejes se siguen viendo en color plano
+  ☐ Uso de array de normales
+  ☐ Implementación correcta clase Luz (y subclases)
+  ☐ Hay al menos una luz direccional
+  ☐ Hay al menos una luz puntual
+  ☐ Modo de visualización sombreado suave
+  ☐ Hay al menos tres materiales distintos en la escena simultáneamente

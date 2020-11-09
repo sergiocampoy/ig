@@ -21,7 +21,7 @@ Escena::Escena()
 
    cubo = new Cubo(50, Tupla3f(0, 0, 0));
    tetraedro = new Tetraedro(50);
-   ply = new ObjPLY("./plys/ori.ply");
+   ply = new ObjPLY("./plys/Monitor.ply");
 
    rev = new ObjRevolucion("./plys/peon.ply", 16, 1, true, true);
    //rev = new Cono(16, 16, 1, 1);
@@ -42,6 +42,7 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
    glEnable(GL_CULL_FACE);
+   glEnable(GL_NORMALIZE);
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
@@ -84,7 +85,7 @@ void Escena::dibujar()
    glPushMatrix();
    glTranslatef(0, 0, -100);
    glRotatef(-90, 1, 0, 0);
-   glScalef(10, 10, 10);
+   glScalef(50, 50, 50);
    if (obj & OBJ_PLY)
       ply->draw(vis, vbo);
    glPopMatrix();
