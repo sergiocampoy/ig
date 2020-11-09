@@ -6,3 +6,6 @@ obj/*
 
 # archivos de VScode (lo siento vimeros, os he fallado)
 .vscode/*
+
+# entrega
+entrega.zip
