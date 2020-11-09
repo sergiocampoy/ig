@@ -8,9 +8,11 @@
 #include "objply.h"
 #include "objrevolucion.h"
 
+// #include "esfera.h"
+
 #include "menu.h"
 
-typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO} menu;
+typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, SELTAPAS} menu;
 class Escena
 {
 
@@ -47,8 +49,7 @@ class Escena
    // menú
    void help(menu modoMenu);
    void info(unsigned int obj, unsigned int vis, bool vbo);
-   // unsigned int obj = OBJ_ALL; // default = visualiza todos los objs
-   unsigned int obj = OBJ_ALL;
+   unsigned int obj = OBJ_ALL; // default = visualiza todos los objs
    unsigned int vis = VIS_SOL; // default = visualiza en modo sólido
    bool vbo = true;            // default = dibuja en VBO
    bool light_mode = false;

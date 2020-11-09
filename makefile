@@ -66,4 +66,7 @@ $(units_cc) : $(headers)
 	touch $(units_cc)
 
 clean:
-	rm -f $(obj)/*.o $(bin)/*_exe
+	rm -f $(obj)/*.o $(bin)/*_exe entrega.zip
+
+entrega: clean
+	zip -r entrega . -x ".vscode/*" ".git/*" ".gitignore" "README.md" "TODO" 

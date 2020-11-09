@@ -27,19 +27,52 @@ class ObjRevolucion : public Malla3D
 {
    public:
        ObjRevolucion();
-   ObjRevolucion(const std::string & archivo, int num_instancias, bool tapa_sup=true, bool tapa_inf=true) ;
-   ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapa_sup=true, bool tapa_inf=true) ;
+   ObjRevolucion(const std::string & archivo, int num_instancias, int eje, bool tapa_sup=true, bool tapa_inf=true) ;
+   ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, int eje, bool tapa_sup=true, bool tapa_inf=true) ;
 
    void draw(unsigned int modo_vis, bool vbo, bool tapas) ;
+
+protected:
+    void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, int eje, bool tapa_sup=true, bool tapa_inf=true);
 private:
     ObjRevolucion *tapaSup = nullptr, *tapaInf = nullptr;
 
     // constructor de tapa
-    ObjRevolucion(Tupla3f p, int num_instancias, bool tapa_sup);
-    void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias);
+    ObjRevolucion(Tupla3f p, int num_instancias, int eje, bool tapa_sup);
 
 } ;
 
+class Cilindro : public ObjRevolucion
+{
+public:
+    Cilindro (
+        const int num_vert_perfil,
+        const int num_instancias_perf,
+        const float altura,
+        const float radio
+    );
+};
+
+class Cono : public ObjRevolucion
+{
+public:
+    Cono (
+        const int num_vert_perfil,
+        const int num_instancias_perf,
+        const float altura,
+        const float radio
+    );
+};
+
+class Esfera : public ObjRevolucion
+{
+public:
+    Esfera (
+        const int num_vert_perfil,
+        const int num_instancias_perfil,
+        const float radio
+    );
+};
 
 
 

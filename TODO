@@ -23,14 +23,14 @@ Personal P1:
 
 Rúbrica P2:
   ✔ Carga y visualiza PLY @done(20-10-22 20:45)
-  ☐ Clase ObjRevolucion
+  ✔ Clase ObjRevolucion @done(20-11-09 13:36)
   ✔ Constructor de revolución a partir de perfil .ply @done(20-10-25 12:43)
   ✔ Constructor de revolución a partir de vector de puntos @done(20-10-25 12:43)
-  ☐ Generación correcta de geometría
-  ☐ Generación correcta de topología en el sentido del ejemplo
-  ☐ Generación correcta de topología en cualquier sentido
-  ☐ Detección de existencia de tapas
-  ☐ Constructores con argumento para crear o no tapas
-  ☐ Visualización opcional de tapas en tiempo de ejecución
-  ☐ Varios objetos simultáneos en la escena
-  ☐ Extra: rotación de perfil en cualquier eje
+  ✔ Generación correcta de geometría @done(20-11-09 13:36)
+  ✔ Generación correcta de topología en el sentido del ejemplo @done(20-11-09 13:36)
+  ✔ Generación correcta de topología en cualquier sentido @done(20-11-09 13:36)
+  ✔ Detección de existencia de tapas @done(20-11-09 13:36)
+  ✔ Constructores con argumento para crear o no tapas @done(20-11-09 13:36)
+  ✔ Visualización opcional de tapas en tiempo de ejecución @done(20-11-09 13:36)
+  ✔ Varios objetos simultáneos en la escena @done(20-11-09 13:36)
+  ✔ Extra: rotación de perfil en cualquier eje @done(20-11-09 13:36)

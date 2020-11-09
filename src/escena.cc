@@ -21,12 +21,12 @@ Escena::Escena()
 
    cubo = new Cubo(50, Tupla3f(0, 0, 0));
    tetraedro = new Tetraedro(50);
-   ply = new ObjPLY("./plys/big_dodge.ply");
-   rev = new ObjRevolucion("./plys/peon.ply", 16);
-    // crear los objetos de la escena....
-    // .......completar: ...
-    // .....
+   ply = new ObjPLY("./plys/ori.ply");
 
+   rev = new ObjRevolucion("./plys/peon.ply", 16, 1, true, true);
+   //rev = new Cono(16, 16, 1, 1);
+   //rev = new Cilindro(4, 16, 1, 1);
+   //rev = new Esfera(16, 16, 1);
 }
 
 //**************************************************************************
@@ -69,19 +69,32 @@ void Escena::dibujar()
     // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
     // y hacer 
 
+   glPushMatrix();
+   glTranslatef(100, 0, 0);
    if (obj & OBJ_CUB)
       cubo->draw(vis, vbo);
+   glPopMatrix();
 
+   glPushMatrix();
+   glTranslatef(-100, 0, 0);
    if (obj & OBJ_TET)
       tetraedro->draw(vis, vbo);
+   glPopMatrix();
 
+   glPushMatrix();
+   glTranslatef(0, 0, -100);
+   glRotatef(-90, 1, 0, 0);
+   glScalef(10, 10, 10);
    if (obj & OBJ_PLY)
       ply->draw(vis, vbo);
+   glPopMatrix();
 
+   glPushMatrix();
+   //glTranslatef(0, 0, 100);
+   glScalef(50, 50, 50);
    if (obj & OBJ_REV)
-      rev->draw(vis, vbo, true);
-   
-    
+      rev->draw(vis, vbo, obj & OBJ_TAP);
+   glPopMatrix();
 }
 
 //**************************************************************************
@@ -108,12 +121,19 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             } else {
                cout << "Modo ajedrez " << FRED("desactivado") << endl;
             }
+         } else if (modoMenu == SELOBJETO) {
+            // Activa/desactiva todos los objetos
+            if (obj != OBJ_ALL) {
+               obj = OBJ_ALL;
+               cout << "Todos los objetos " << FGRN("activados") << endl;
+            } else {
+               obj = 0;
+               cout << "Todos los objetos " << FRED("desactivados") << endl;
+            }
          } else {
             cout << FRED("Opción inválida") << endl;
             help(modoMenu);
          }
-      break;
-      case 'B':
       break;
       case 'C':
          if (modoMenu == SELOBJETO) {
@@ -134,12 +154,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          modoMenu = SELDIBUJADO;
          help(modoMenu);
       break;
-      case 'E':
-      break;
-      case 'F':
-      break;
-      case 'G':
-      break;
       case 'H':
          // Ayuda
          help(modoMenu);
@@ -147,10 +161,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       case 'I':
          // Información
          info(obj, vis, vbo);
-      break;
-      case 'J':
-      break;
-      case 'K':
       break;
       case 'L':
          if (modoMenu == SELVISUALIZACION) {
@@ -176,9 +186,16 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             help(modoMenu);
          }
       break;
-      case 'M':
-      break;
       case 'N':
+         if (modoMenu == SELTAPAS) {
+            // Desactiva las tapas del objeto de revolución
+            obj &= ~OBJ_TAP;
+            cout << "Tapas " << FRED("desactivadas") << endl;
+            modoMenu = SELOBJETO;
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
       break;
       case 'O':
          // Seleccionar objeto
@@ -223,6 +240,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             obj ^= OBJ_REV;
             if (obj & OBJ_REV) {
                cout << "Objeto de revolución " << FGRN("activado") << endl;
+               cout << "Quieres tapas? ("
+                    << FGRN("y") << "/" << FRED("n") << ")" << endl;
+               modoMenu = SELTAPAS;
             } else {
                cout << "Objeto de revolución " << FRED("desactivado") << endl;
             }
@@ -259,20 +279,21 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             help(modoMenu);
          }
       break;
-      case 'U':
-      break;
       case 'V':
          // Seleccionar modo de visualización
          modoMenu = SELVISUALIZACION;
          help(modoMenu);
       break;
-      case 'W':
-      break;
-      case 'X':
-      break;
       case 'Y':
-      break;
-      case 'Z':
+         if (modoMenu == SELTAPAS) {
+            // Activa/desactiva tapas del objeto de revolución
+            obj |= OBJ_TAP;
+            cout << "Tapas " << FGRN("activadas") << endl;
+            modoMenu = SELOBJETO;
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
       break;
       case '1' :
          if (modoMenu == SELDIBUJADO) {
@@ -301,160 +322,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          help(modoMenu);
       break;
    }
-/*
-   switch( toupper(tecla) )
-   {
-      case 'Q' :
-         if (modoMenu!=NADA) {
-            modoMenu=NADA;
-            help(modoMenu);
-         }
-         else {
-            salir=true ;
-         }
-      break ;
-      case 'O' :
-         // ESTAMOS EN MODO SELECCION DE OBJETO
-         modoMenu=SELOBJETO;
-         help(modoMenu);
-      break ;
-      case 'V' :
-         // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
-         modoMenu=SELVISUALIZACION;
-         help(modoMenu);
-      break ;
-      case 'D' :
-         // ESTAMOS EN MODO SELECCION DE DIBUJADO
-         modoMenu=SELDIBUJADO;
-         help(modoMenu);
-      break ;
-      
-      // OPCIONES DE SELECCIÓN DE OBJETO
-      case 'C' :
-         if (modoMenu == SELOBJETO) {
-            obj ^= OBJ_CUB; // Alterna visibilidad
-            if (obj & OBJ_CUB) {
-               cout << "Cubo " << FGRN("activado") << endl;
-            } else {
-               cout << "Cubo " << FRED("desactivado") << endl;
-            }
-         } else {
-            cout << FRED("Opción inválida") << endl;
-            help(modoMenu);
-         }
-      break;
-      case 'T' :
-         if (modoMenu == SELOBJETO) {
-            obj ^= OBJ_TET; // Alterna visibilidad
-            if (obj & OBJ_TET) {
-               cout << "Tetraedro " << FGRN("activado") << endl;
-            } else {
-               cout << "Tetraedro " << FRED("desactivado") << endl;
-            }
-         } else {
-            cout << FRED("Opción inválida") << endl;
-            help(modoMenu);
-         }
-      break;
-
-      // OPCIONES DE SELECCIÓN DE MODO DE VISUALIZACIÓN
-      case 'P' :
-         if (modoMenu == SELOBJETO) {
-            obj ^= OBJ_TET; // Alterna visibilidad
-            if (obj & OBJ_TET) {
-               cout << "Tetraedro " << FGRN("activado") << endl;
-            } else {
-               cout << "Tetraedro " << FRED("desactivado") << endl;
-            }
-         } else {
-            cout << FRED("Opción inválida") << endl;
-            help(modoMenu);
-         }
-      break;
-      case 'L' :
-         if (modoMenu == SELVISUALIZACION) {
-            vis ^= VIS_LIN; // Alterna estado
-            if (vis & VIS_LIN) {
-               cout << "Modo lineas " << FGRN("activado") << endl;
-            } else {
-               cout << "Modo lineas " << FRED("desactivado") << endl;
-            }
-         } else if (modoMenu == NADA) {
-            light_mode = !light_mode;
-            if (light_mode)
-            {
-               glClearColor( 1.0, 1.0, 1.0, 1.0 );
-               cout << "Modo oscuro " << FRED("desactivado") << endl;
-            } else {
-               glClearColor( 40.0/255, 42.0/255, 54.0/255, 1.0); // #DarkModeEverything
-               cout << "Modo oscuro " << FGRN("activado") << endl;
-            }
-         }
-      break;
-      case 'S' :
-         if (modoMenu == SELVISUALIZACION) {
-            vis ^= VIS_SOL; // Alterna estado
-            if (vis & VIS_SOL) {
-               cout << "Modo sólido " << FGRN("activado") << endl;
-            } else {
-               cout << "Modo sólido " << FRED("desactivado") << endl;
-            }
-         } else {
-            cout << FRED("Opción inválida") << endl;
-            help(modoMenu);
-         }
-      break;
-      case 'A' :
-         if (modoMenu == SELVISUALIZACION) {
-            vis ^= VIS_AJE; // Alterna estado
-            if (vis & VIS_AJE) {
-               cout << "Modo ajedrez " << FGRN("activado") << endl;
-            } else {
-               cout << "Modo ajedrez " << FRED("desactivado") << endl;
-            }
-         } else {
-            cout << FRED("Opción inválida") << endl;
-            help(modoMenu);
-         }
-      break;
-
-      // OPCIONES DE SELECCIÓN DE MODO DE DIBUJADO
-      case '1' :
-         if (modoMenu == SELDIBUJADO) {
-            vbo = false;
-            cout << "Modo inmediato " << FGRN("activado") << endl;
-            cout << "Modo diferido " << FRED("desactivado") << endl;
-            cout << endl;
-         } else {
-            cout << FRED("Opción inválida") << endl;
-            help(modoMenu);
-         }
-      break;
-      case '2' :
-         if (modoMenu == SELDIBUJADO) {
-            vbo = true;
-            cout << "Modo diferido " << FRED("activado") << endl;
-            cout << "Modo inmediato " << FGRN("desactivado") << endl;
-            cout << endl;
-         } else {
-            cout << FRED("Opción inválida") << endl;
-            help(modoMenu);
-         }
-      break;
-      case 'H' :
-         // AYUDA
-         help(modoMenu);
-      break;
-      case 'I' :
-         // INFO
-         info(obj, vis, vbo);
-      break;
-      default:
-         cout << FRED("Opción inválida.") << endl;
-         help(modoMenu);
-      break;
-   }
-   */
    return salir;
 }
 //**************************************************************************
@@ -551,6 +418,7 @@ void Escena::help(menu modoMenu)
             "H - Muestra este menú\n"
             "I - Información de la escena\n"
             "Q - Volver al menú principal\n"
+            "A - Activar/desactivar todos los objetos\n"
             "C - Activar/desactivar cubo\n"
             "T - Activar/desactivar tetraedro\n"
             "P - Activar/desactivar objeto ply\n"
@@ -591,41 +459,51 @@ void Escena::info(unsigned int obj, unsigned int vis, bool vbo)
      << BOLD(FBLU("Información de la escena.")) << endl
      << FBLU("Objetos") << endl
 
-     << "\tCubo:\t\t"
+     << "\tCubo:           "
      << ((obj & OBJ_CUB) ? FGRN("si") : FRED("no"))
      << endl
 
-     << "\tTetraedro:\t"
+     << "\tTetraedro:      "
      << ((obj & OBJ_TET) ? FGRN("si") : FRED("no"))
      << endl
+
+     << "\tObjeto PLY:     "
+     << ((obj & OBJ_PLY) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tObjeto de rev:  "
+     << ((obj & OBJ_REV) ? FGRN("si") : FRED("no"))
+     << " (tapas: "
+     << ((obj & OBJ_TAP) ? FGRN("si") : FRED("no"))
+     << ")" << endl
 
 
      << endl << FBLU("Modo de visualización") << endl
 
-     << "\tModo puntos:\t"
+     << "\tModo puntos:    "
      << ((vis & VIS_PUN) ? FGRN("si") : FRED("no"))
      << endl
 
-     << "\tModo líneas:\t"
+     << "\tModo líneas:    "
      << ((vis & VIS_LIN) ? FGRN("si") : FRED("no"))
      << endl
 
-     << "\tModo sólido:\t"
+     << "\tModo sólido:    "
      << ((vis & VIS_SOL) ? FGRN("si") : FRED("no"))
      << endl
 
-     << "\tModo ajedrez:\t"
+     << "\tModo ajedrez:   "
      << ((vis & VIS_AJE) ? FGRN("si") : FRED("no"))
      << endl
 
 
      << endl << FBLU("Modo de dibujado") << endl
 
-     << "\tModo inmediato:\t"
+     << "\tModo inmediato: "
      << (!vbo ? FGRN("si") : FRED("no"))
      << endl
 
-     << "\tModo diferido:\t"
+     << "\tModo diferido:  "
      << (vbo ? FGRN("si") : FRED("no"))
      << endl
 

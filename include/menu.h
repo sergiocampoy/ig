@@ -2,20 +2,21 @@
 #define _MENU_H
 
 // selección de objeto
-#define OBJ_ALL 0xf
+#define OBJ_ALL 0b11111
 
 #define OBJ_CUB 0b1
 #define OBJ_TET 0b10
 #define OBJ_PLY 0b100
 #define OBJ_REV 0b1000
+#define OBJ_TAP 0b10000
 
 
 // selección de modo de visualización
 #define VIS_ALL 0b1111
 
-#define VIS_PUN 0b0001
-#define VIS_LIN 0b0010
-#define VIS_SOL 0b0100
+#define VIS_PUN 0b1
+#define VIS_LIN 0b10
+#define VIS_SOL 0b100
 #define VIS_AJE 0b1000
 
 
