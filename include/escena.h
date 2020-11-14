@@ -7,12 +7,19 @@
 #include "tetraedro.h"
 #include "objply.h"
 #include "objrevolucion.h"
-
-// #include "esfera.h"
+#include "luz.h"
 
 #include "menu.h"
 
-typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, SELTAPAS} menu;
+typedef enum {
+    NADA,
+    SELOBJETO,
+    SELVISUALIZACION,
+    SELDIBUJADO,
+    SELTAPAS,
+    SELILUMINACION
+} menu;
+
 class Escena
 {
 
@@ -45,14 +52,33 @@ class Escena
    Tetraedro * tetraedro= nullptr ; // es importante inicializarlo a 'nullptr'
    ObjPLY * ply = nullptr;
    ObjRevolucion* rev = nullptr;
+   ObjRevolucion* peon1 = nullptr;
+   ObjRevolucion* peon2 = nullptr;
+
+   // Luces
+
+   /// Luz posicional
+   LuzPosicional* lp = nullptr;
+   /// Luz direccional
+   LuzDireccional* ld = nullptr;
+
 
    // menú
    void help(menu modoMenu);
-   void info(unsigned int obj, unsigned int vis, bool vbo);
+   void info(menu modoMenu, unsigned int obj, unsigned int vis, bool vbo);
+   void infoObjetos(unsigned int obj);
+   void infoVisualizacion(unsigned int vis);
+   void infoDibujado(bool vbo);
+   void infoIluminacion();
    unsigned int obj = OBJ_ALL; // default = visualiza todos los objs
    unsigned int vis = VIS_SOL; // default = visualiza en modo sólido
    bool vbo = true;            // default = dibuja en VBO
    bool light_mode = false;
+   
+   // P3
+
+   /// true : incrementa alpha, false : incrementa beta
+   bool inc_alpha = true;
    
    public:
 

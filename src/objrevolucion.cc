@@ -95,6 +95,8 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
 
    if (tapa_inf && !(modulos.front() == 0))
       tapaInf = new ObjRevolucion(v.front(), num_instancias, eje, false);
+   
+   calcular_normales();
 }
 
 
@@ -148,6 +150,7 @@ void ObjRevolucion::draw(unsigned int modo_vis, bool vbo, bool tapas)
 
    // dibuja el cuerpo
    Malla3D::draw(modo_vis, vbo);
+   m.aplicar();
 }
 
 
@@ -199,7 +202,7 @@ Esfera::Esfera (
    const float radio
 ) {
    std::vector<Tupla3f> perfil;
-   float alpha = (M_PI) / (float)(num_vert_perfil);
+   float alpha = (M_PI) / (float)(num_vert_perfil-1);
 
    for (unsigned int i = 0; i < num_vert_perfil; i++)
    {
@@ -212,4 +215,15 @@ Esfera::Esfera (
 
    crearMalla(perfil, num_instancias_perf, 1, false, false);
    colorea();
+}
+
+void ObjRevolucion::setMaterial (Material mat)
+{
+   m = mat;
+   if (tapaSup != nullptr) {
+      tapaSup->setMaterial (mat);
+   }
+   if (tapaInf != nullptr) {
+      tapaInf->setMaterial (mat);
+   }
 }

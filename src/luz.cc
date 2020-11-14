@@ -2,7 +2,26 @@
 
 void Luz::activar()
 {
-   printf("WIP Luz::activar\n");
+   glLightfv(id, GL_AMBIENT, colorAmbiente);
+   glLightfv(id, GL_DIFFUSE, colorDifuso);
+   glLightfv(id, GL_SPECULAR, colorEspecular);
+
+   glLightfv(id, GL_POSITION, posicion);
+   // printf("WIP Luz::activar\n");
+   //glEnable(GL_LIGHT0);
+   //glLightfv(GL_LIGHT0, GL_POSITION, this->posicion);
+//   glLightfv(GL_LIGHT0, GL_POSITION, Tupla4f(0, 0, 0, 0));
+   //GLfloat lmodel_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+//glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
+/*
+ const GLfloat posf[4] = { 100, 100, 100, 1.0 } ; // (x,y,z,w)
+ glLightfv( GL_LIGHT0, GL_POSITION, posf );
+ glLightfv(GL_LIGHT0, GL_SPECULAR, Tupla4f(1, 0, 0, 1));
+
+ glLightfv(GL_LIGHT1, GL_DIFFUSE, Tupla4f(0, 0, 1, 1));
+*/
+//const GLfloat dirf[4] = { 100, 100, 100, 0.0 } ; // (x,y,z,w)
+//glLightfv( GL_LIGHT0, GL_POSITION, dirf );
 }
 
 LuzDireccional::LuzDireccional (

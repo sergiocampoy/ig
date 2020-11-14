@@ -14,6 +14,27 @@ Material::Material (
 
 void Material::aplicar()
 {
-   printf("WIP Material::aplicar\n");
+   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, brillo);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, difuso);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, especular);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambiente);
+
+   // printf("WIP Material::aplicar\n");
+   /*
+   glMaterialf(GL_FRONT, GL_SHININESS, 64);
+   glMaterialfv(GL_FRONT, GL_SPECULAR, Tupla4f(1, 0, 0, 1));
+   glMaterialfv(GL_FRONT, GL_DIFFUSE, Tupla4f(0, 0, 1, 1));
+   */
+/*
+GLfloat color[4] = { 1, 1, 1, 1.0 } ;
+// hace MA := (r, g, b), inicialmente (0.2,0.2,0.2)
+glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT, color ) ;
+// hace MD := (r, g, b), inicialmente (0.8,0.8,0.8)
+glMaterialfv( GL_FRONT_AND_BACK, GL_DIFFUSE, color ) ;
+// hace MS := (r, g, b), inicialmente (0,0,0)
+glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, color ) ;
+// hace e := v, inicialmente 0.0 (debe estar entre 0.0 y 128.0)
+glMaterialf( GL_FRONT_AND_BACK, GL_SHININESS, 60 ) ;
+*/
 }
 

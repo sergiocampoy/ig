@@ -156,6 +156,8 @@ void Malla3D::draw(unsigned int modo_vis, bool vbo)
       draw_ModoInmediato(modo_vis);
    */
 
+   m.aplicar();
+
    if (vbo) {
       if (modo_vis & VIS_AJE) {
          draw_ModoDiferido_Ajedrez();
@@ -337,14 +339,32 @@ void Malla3D::calcular_normales()
       n_c.push_back(n);
    }
 
+   // inicializa la tabla de normales de los vértices
+   for (auto i : v)
+   {
+      n_v.emplace_back(0, 0, 0);
+   }
+
    // Calcula la tabla de normales de los vértices
    for (unsigned int i = 0; i < f.size(); i++)
    {
       Tupla3i cara = f[i];
       Tupla3f normal = n_c[i];
 
-      n_v[cara(0)] = n_v[cara(0)] + normal;
-      n_v[cara(1)] = n_v[cara(1)] + normal;
-      n_v[cara(2)] = n_v[cara(2)] + normal;
+      n_v.at(cara(0)) = n_v[cara(0)] + normal;
+      n_v.at(cara(1)) = n_v[cara(1)] + normal;
+      n_v.at(cara(2)) = n_v[cara(2)] + normal;
+   }
+
+   printf("normales:\n");
+   for (auto i : n_v)
+   {
+      //i = i.normalized();
+   }
+
+   for (unsigned int i = 0; i < n_v.size(); i++)
+   {
+      //printf("%d, %d, %d\n", n_v[i](0), n_v[i](1), n_v[i](2));
+      n_v[i] = n_v[i].normalized();
    }
 }

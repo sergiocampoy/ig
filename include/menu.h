@@ -12,13 +12,21 @@
 
 
 // selección de modo de visualización
-#define VIS_ALL 0b1111
+#define VIS_ALL 0b01111
 
-#define VIS_PUN 0b1
-#define VIS_LIN 0b10
-#define VIS_SOL 0b100
-#define VIS_AJE 0b1000
+#define VIS_PUN 0b00001
+#define VIS_LIN 0b00010
+#define VIS_SOL 0b00100
+#define VIS_AJE 0b01000
 
+// P3
+#define VIS_ILU 0b10000
+
+
+// constantes
+
+/// Ángulo de giro de la luz direccional
+#define ANG_ILU 10
 
 // colores terminal
 

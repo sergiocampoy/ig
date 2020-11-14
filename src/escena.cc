@@ -21,12 +21,72 @@ Escena::Escena()
 
    cubo = new Cubo(50, Tupla3f(0, 0, 0));
    tetraedro = new Tetraedro(50);
-   ply = new ObjPLY("./plys/Monitor.ply");
+   ply = new ObjPLY("./plys/ori.ply");
 
+   // Objetos de revolución
    rev = new ObjRevolucion("./plys/peon.ply", 16, 1, true, true);
    //rev = new Cono(16, 16, 1, 1);
    //rev = new Cilindro(4, 16, 1, 1);
    //rev = new Esfera(16, 16, 1);
+
+   peon1 = new ObjRevolucion("./plys/peon.ply", 16, 1, true, true);
+   peon2 = new ObjRevolucion("./plys/peon.ply", 16, 1, true, true);
+
+   // Materiales de los peones
+   peon1->setMaterial (
+      Material (
+         Tupla4f (1.0, 1.0, 1.0, 1.0),
+         Tupla4f (0.0, 0.0, 0.0, 0.0),
+         Tupla4f (0.0, 0.0, 0.0, 0.0),
+         0
+      )
+   );
+   peon2->setMaterial (
+      Material (
+         Tupla4f(0.0, 0.0, 0.0, 0.0),
+         Tupla4f(1.0, 1.0, 1.0, 1.0),
+         Tupla4f(0.0, 0.0, 0.0, 0.0),
+         0
+      )
+   );
+
+   // Iluminación
+   /*
+   ld = new LuzDireccional(
+      Tupla2f (0, 90),
+      GL_LIGHT0,
+      Tupla4f (1, 1, 1, 1),
+      Tupla4f (1, 1, 1, 1),
+      Tupla4f (1, 1, 1, 1)
+   );
+   */
+   //ld->activar();
+   /*
+   lp = new LuzPosicional (
+      Tupla3f (0, 20, 0),
+      GL_LIGHT0,
+      Tupla4f(1.0, 1.0, 1.0, 1.0),
+      Tupla4f(1.0, 1.0, 1.0, 1.0),
+      Tupla4f(1.0, 1.0, 1.0, 1.0)
+   );
+   */
+   lp = new LuzPosicional (
+      {0, 20, 0},
+      GL_LIGHT0,
+      {0, 0, 0, 1},
+      {1, 1, 1, 1},
+      {1, 1, 1, 1}
+   );
+
+   // Materiales
+   Material m(
+      Tupla4f(1.0, 1.0, 1.0, 1.0),
+      Tupla4f(1.0, 1.0, 1.0, 1.0),
+      Tupla4f(1.0, 1.0, 1.0, 1.0),
+      0
+   );
+
+   rev->setMaterial(m);
 }
 
 //**************************************************************************
@@ -64,12 +124,10 @@ void Escena::dibujar()
 {
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
 	change_observer();
-    ejes.draw();
-    // COMPLETAR
-    //   Dibujar los diferentes elementos de la escena
-    // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
-    // y hacer 
+   ejes.draw();
 
+   lp->activar();
+   
    glPushMatrix();
    glTranslatef(100, 0, 0);
    if (obj & OBJ_CUB)
@@ -85,17 +143,28 @@ void Escena::dibujar()
    glPushMatrix();
    glTranslatef(0, 0, -100);
    glRotatef(-90, 1, 0, 0);
-   glScalef(50, 50, 50);
+   glScalef(10, 10, 10);
    if (obj & OBJ_PLY)
       ply->draw(vis, vbo);
    glPopMatrix();
 
    glPushMatrix();
-   //glTranslatef(0, 0, 100);
-   glScalef(50, 50, 50);
+   glTranslatef(20, 0, 0);
+   glScalef(20, 20, 20);
    if (obj & OBJ_REV)
-      rev->draw(vis, vbo, obj & OBJ_TAP);
+      peon1->draw(vis, vbo, obj & OBJ_TAP);
    glPopMatrix();
+
+   glPushMatrix();
+   glTranslatef(-20, 0, 0);
+   glScalef(20, 20, 20);
+   if (obj & OBJ_REV)
+      peon2->draw(vis, vbo, obj & OBJ_TAP);
+   glPopMatrix();
+
+   // GLfloat a = 128;
+   // glMaterialfv(GL_FRONT, GL_SPECULAR, Tupla4f(1, 1, 1, 1));
+   // glMaterialf(GL_FRONT, GL_SHININESS, a);
 }
 
 //**************************************************************************
@@ -122,6 +191,8 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             } else {
                cout << "Modo ajedrez " << FRED("desactivado") << endl;
             }
+            // P3 - Desactiva iluminación
+            glDisable(GL_LIGHTING);
          } else if (modoMenu == SELOBJETO) {
             // Activa/desactiva todos los objetos
             if (obj != OBJ_ALL) {
@@ -160,8 +231,24 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          help(modoMenu);
       break;
       case 'I':
-         // Información
-         info(obj, vis, vbo);
+         if (modoMenu == NADA) {
+            // Seleccionar opciones iluminación
+            modoMenu = SELILUMINACION;
+            glEnable(GL_LIGHTING);
+            cout << "Iluminación " << FGRN("activada") << endl;
+            help(modoMenu);
+         } else if (modoMenu == SELILUMINACION) {
+            if (glIsEnabled(GL_LIGHTING)) {
+               glDisable(GL_LIGHTING);
+               cout << "Iluminación " << FRED("desactivada") << endl;
+            } else {
+               glEnable(GL_LIGHTING);
+               cout << "Iluminación " << FGRN("activada") << endl;
+            }
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
       break;
       case 'L':
          if (modoMenu == SELVISUALIZACION) {
@@ -172,6 +259,8 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             } else {
                cout << "Modo lineas " << FRED("desactivado") << endl;
             }
+            // P3 - Desactiva iluminación
+            glDisable(GL_LIGHTING);
          } else if (modoMenu == NADA) {
             light_mode = !light_mode;
             if (light_mode)
@@ -212,6 +301,8 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             } else {
                cout << "Modo puntos " << FRED("desactivado") << endl;
             }
+            // P3 - Desactiva iluminación
+            glDisable(GL_LIGHTING);
          } else if (modoMenu == SELOBJETO) {
             // Activa/desactiva PLY
             obj ^= OBJ_PLY;
@@ -261,6 +352,8 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             } else {
                cout << "Modo sólido " << FRED("desactivado") << endl;
             }
+            // P3 - Desactiva iluminación
+            glDisable(GL_LIGHTING);
          } else {
             cout << FRED("Opción inválida") << endl;
             help(modoMenu);
@@ -302,6 +395,14 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             cout << "Modo inmediato " << FGRN("activado") << endl;
             cout << "Modo diferido " << FRED("desactivado") << endl;
             cout << endl;
+         } else if (modoMenu == SELILUMINACION) {
+            if (glIsEnabled(GL_LIGHT0)) {
+               glDisable(GL_LIGHT0);
+               cout << "Luz 0 " << FRED("desactivada") << endl;
+            } else {
+               glEnable(GL_LIGHT0);
+               cout << "Luz 0 " << FGRN("activada") << endl;
+            }
          } else {
             cout << FRED("Opción inválida") << endl;
             help(modoMenu);
@@ -310,13 +411,64 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       case '2' :
          if (modoMenu == SELDIBUJADO) {
             vbo = true;
-            cout << "Modo diferido " << FRED("activado") << endl;
-            cout << "Modo inmediato " << FGRN("desactivado") << endl;
+            cout << "Modo diferido " << FGRN("activado") << endl;
+            cout << "Modo inmediato " << FRED("desactivado") << endl;
             cout << endl;
+         } else if (modoMenu == SELILUMINACION) {
+            if (glIsEnabled(GL_LIGHT1)) {
+               glDisable(GL_LIGHT1);
+               cout << "Luz 1 " << FRED("desactivada") << endl;
+            } else {
+               glEnable(GL_LIGHT1);
+               cout << "Luz 1 " << FGRN("activada") << endl;
+            }
          } else {
             cout << FRED("Opción inválida") << endl;
             help(modoMenu);
          }
+      break;
+      case '3' :
+         if (modoMenu == SELILUMINACION) {
+            if (glIsEnabled(GL_LIGHT2)) {
+               glDisable(GL_LIGHT2);
+               cout << "Luz 2 " << FRED("desactivada") << endl;
+            } else {
+               glEnable(GL_LIGHT2);
+               cout << "Luz 2 " << FGRN("activada") << endl;
+            }
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
+      case '<':
+         if (modoMenu == SELILUMINACION) {
+            // Decrementa el ángulo
+            if (inc_alpha) {
+               ld->VariarAnguloAlpha(-ANG_ILU);
+            } else {
+               ld->VariarAnguloBeta(-ANG_ILU);
+            }
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
+      break;
+      case '>':
+         if (modoMenu == SELILUMINACION) {
+            // Decrementa el ángulo
+            if (inc_alpha) {
+               ld->VariarAnguloAlpha(ANG_ILU);
+            } else {
+               ld->VariarAnguloBeta(ANG_ILU);
+            }
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
+      break;
+      case '.':
+         // Información
+         info(modoMenu, obj, vis, vbo);
       break;
       default:
          cout << FRED("Opción inválida") << endl;
@@ -405,19 +557,20 @@ void Escena::help(menu modoMenu)
          printf(
             BOLD(FBLU("Menú principal:\n"))
             "H - Muestra este menú\n"
-            "I - Información de la escena\n"
             "L - Activar/Desactivar modo oscuro\n"
+            ". - Información de la escena\n"
             "Q - Salir\n"
             "O - Selección de objeto\n"
             "V - Selección de modo de visualización\n"
             "D - Selección de modo de dibujado\n"
+            "I - Opciones de iluminación\n"
          );
       break;
       case SELOBJETO:
          printf(
             BOLD(FBLU("Selección de objeto\n"))
             "H - Muestra este menú\n"
-            "I - Información de la escena\n"
+            ". - Información de la escena\n"
             "Q - Volver al menú principal\n"
             "A - Activar/desactivar todos los objetos\n"
             "C - Activar/desactivar cubo\n"
@@ -430,7 +583,7 @@ void Escena::help(menu modoMenu)
          printf(
             BOLD(FBLU("Selección de modo de visualización\n"))
             "H - Muestra este menú\n"
-            "I - Información de la escena\n"
+            ". - Información de la escena\n"
             "Q - Volver al menú principal\n"
             "P - Activar/desactivar modo puntos\n"
             "L - Activar/desactivar modo línea\n"
@@ -442,7 +595,7 @@ void Escena::help(menu modoMenu)
          printf(
             BOLD(FBLU("Selección de modo de dibujado\n"))
             "H - Muestra este menú\n"
-            "I - Información de la escena\n"
+            ". - Información de la escena\n"
             "Q - Volver al menú principal\n"
             "1 - Visualizar mediante glDrawElements\n"
             "2 - Visualizar mediante VBOs\n"
@@ -452,12 +605,20 @@ void Escena::help(menu modoMenu)
    printf("\n");
 }
 
-void Escena::info(unsigned int obj, unsigned int vis, bool vbo)
+void Escena::info(menu modoMenu, unsigned int obj, unsigned int vis, bool vbo)
 {
+   /*
    using namespace std;
 
+   // info iluminación
+   bool ilu = glIsEnabled(GL_LIGHTING);
+   bool li0 = glIsEnabled(GL_LIGHT0);
+   bool li1 = glIsEnabled(GL_LIGHT1);
+   bool li2 = glIsEnabled(GL_LIGHT2);
+
    cout
-     << BOLD(FBLU("Información de la escena.")) << endl
+     << BOLD(FBLU("Información de la escena")) << endl
+
      << FBLU("Objetos") << endl
 
      << "\tCubo:           "
@@ -508,5 +669,145 @@ void Escena::info(unsigned int obj, unsigned int vis, bool vbo)
      << (vbo ? FGRN("si") : FRED("no"))
      << endl
 
+
+
+     << endl << FBLU("Iluminación             ")
+     << (ilu ? FGRN("si") : FRED("no")) << endl
+
+     << "\tLIGHT0:         "
+     << (li0 ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tLIGHT1:         "
+     << (li1 ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tLIGHT2:         "
+     << (li2 ? FGRN("si") : FRED("no"))
+     << endl
+
      << endl;
+   */
+   
+   using namespace std;
+
+   switch (modoMenu)
+   {
+      case NADA:
+         cout << BOLD(FBLU("Información de la escena")) << endl;
+         cout << endl;
+         infoObjetos(obj);
+         cout << endl;
+         infoVisualizacion(vis);
+         cout << endl;
+         infoDibujado(vbo);
+         cout << endl;
+         infoIluminacion();
+      break;
+      case SELOBJETO:
+         infoObjetos(obj);
+      break;
+      case SELVISUALIZACION:
+         infoVisualizacion(vis);
+      break;
+      case SELDIBUJADO:
+         infoDibujado(vbo);
+      break;
+      case SELILUMINACION:
+         infoIluminacion();
+      break;
+      default:
+         cout << FRED("Error :(") << endl;
+      break;
+   }
+}
+
+void Escena::infoObjetos(unsigned int obj)
+{
+   using namespace std;
+   cout
+      << FBLU("Objetos") << endl
+
+      << "\tCubo:           "
+      << ((obj & OBJ_CUB) ? FGRN("si") : FRED("no"))
+      << endl
+
+      << "\tTetraedro:      "
+      << ((obj & OBJ_TET) ? FGRN("si") : FRED("no"))
+      << endl
+
+      << "\tObjeto PLY:     "
+      << ((obj & OBJ_PLY) ? FGRN("si") : FRED("no"))
+      << endl
+
+      << "\tObjeto de rev:  "
+      << ((obj & OBJ_REV) ? FGRN("si") : FRED("no"))
+      << " (tapas: "
+      << ((obj & OBJ_TAP) ? FGRN("si") : FRED("no"))
+      << ")" << endl;
+}
+
+void Escena::infoVisualizacion(unsigned int vis)
+{
+   using namespace std;
+   cout
+      << FBLU("Modo de visualización") << endl
+
+      << "\tModo puntos:    "
+      << ((vis & VIS_PUN) ? FGRN("si") : FRED("no"))
+      << endl
+
+      << "\tModo líneas:    "
+      << ((vis & VIS_LIN) ? FGRN("si") : FRED("no"))
+      << endl
+
+      << "\tModo sólido:    "
+      << ((vis & VIS_SOL) ? FGRN("si") : FRED("no"))
+      << endl
+
+      << "\tModo ajedrez:   "
+      << ((vis & VIS_AJE) ? FGRN("si") : FRED("no"))
+      << endl;
+}
+
+void Escena::infoDibujado(bool vbo)
+{
+   using namespace std;
+   cout
+      << FBLU("Modo de dibujado") << endl
+
+      << "\tModo inmediato: "
+      << (!vbo ? FGRN("si") : FRED("no"))
+      << endl
+
+      << "\tModo diferido:  "
+      << (vbo ? FGRN("si") : FRED("no"))
+      << endl;
+}
+
+void Escena::infoIluminacion()
+{
+   using namespace std;
+
+   // info iluminación
+   bool ilu = glIsEnabled(GL_LIGHTING);
+   bool li0 = glIsEnabled(GL_LIGHT0);
+   bool li1 = glIsEnabled(GL_LIGHT1);
+   bool li2 = glIsEnabled(GL_LIGHT2);
+
+   cout
+      << FBLU("Iluminación             ")
+      << (ilu ? FGRN("si") : FRED("no")) << endl
+
+      << "\tLIGHT0:         "
+      << (li0 ? FGRN("si") : FRED("no"))
+      << endl
+
+      << "\tLIGHT1:         "
+      << (li1 ? FGRN("si") : FRED("no"))
+      << endl
+
+      << "\tLIGHT2:         "
+      << (li2 ? FGRN("si") : FRED("no"))
+      << endl;
 }
