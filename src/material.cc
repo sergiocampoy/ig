@@ -14,10 +14,16 @@ Material::Material (
 
 void Material::aplicar()
 {
-   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, brillo);
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, difuso);
    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, especular);
    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambiente);
+   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, brillo);
+
+   glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION);
+   glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT);
+   glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+   glColorMaterial(GL_FRONT_AND_BACK, GL_SPECULAR);
+   glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
    // printf("WIP Material::aplicar\n");
    /*

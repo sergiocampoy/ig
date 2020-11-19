@@ -21,13 +21,13 @@ public:
 
 class LuzDireccional : public Luz
 {
-protected:
+
+public:
    // Coordenadas esféricas
    /// Latitud
    float alpha;
    /// Longitud
    float beta;
-public:
    /// Constructor
    LuzDireccional (
       const Tupla2f& direccion,

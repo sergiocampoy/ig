@@ -35,47 +35,35 @@ Escena::Escena()
    // Materiales de los peones
    peon1->setMaterial (
       Material (
-         Tupla4f (1.0, 1.0, 1.0, 1.0),
-         Tupla4f (0.0, 0.0, 0.0, 0.0),
-         Tupla4f (0.0, 0.0, 0.0, 0.0),
-         0
+         {1, 1, 1, 1},
+         {0, 0, 0, 1},
+         {0, 0, 0, 1},
+         128
       )
    );
    peon2->setMaterial (
       Material (
-         Tupla4f(0.0, 0.0, 0.0, 0.0),
-         Tupla4f(1.0, 1.0, 1.0, 1.0),
-         Tupla4f(0.0, 0.0, 0.0, 0.0),
-         0
+         {0, 0, 0, 1},
+         {1, 1, 1, 1},
+         {0, 0, 0, 1},
+         128
       )
    );
 
    // Iluminación
-   /*
-   ld = new LuzDireccional(
-      Tupla2f (0, 90),
-      GL_LIGHT0,
-      Tupla4f (1, 1, 1, 1),
-      Tupla4f (1, 1, 1, 1),
-      Tupla4f (1, 1, 1, 1)
-   );
-   */
-   //ld->activar();
-   /*
    lp = new LuzPosicional (
-      Tupla3f (0, 20, 0),
+      {0, 0, 20},
       GL_LIGHT0,
-      Tupla4f(1.0, 1.0, 1.0, 1.0),
-      Tupla4f(1.0, 1.0, 1.0, 1.0),
-      Tupla4f(1.0, 1.0, 1.0, 1.0)
+      {1, 0, 0, 1},
+      {1, 0, 0, 1},
+      {1, 0, 0, 1}
    );
-   */
-   lp = new LuzPosicional (
-      {0, 20, 0},
-      GL_LIGHT0,
-      {0, 0, 0, 1},
-      {1, 1, 1, 1},
-      {1, 1, 1, 1}
+   ld = new LuzDireccional (
+      {0, 0},
+      GL_LIGHT1,
+      {0, 1, 0, 1},
+      {0, 1, 0, 1},
+      {0, 1, 0, 1}
    );
 
    // Materiales
@@ -104,6 +92,9 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
    glEnable(GL_CULL_FACE);
    glEnable(GL_NORMALIZE);
 
+   glEnable(GL_RESCALE_NORMAL);
+   glShadeModel(GL_FLAT); // Smooth lighting = off
+
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
 
@@ -126,8 +117,17 @@ void Escena::dibujar()
 	change_observer();
    ejes.draw();
 
-   lp->activar();
-   
+   glPushMatrix();
+      glTranslatef(0, 0, 0);
+      lp->activar();
+   glPopMatrix();
+
+   glPushMatrix();
+      glRotatef(ld->alpha, 1, 0, 0);
+      glRotatef(ld->beta, 0, 1, 0);
+      ld->activar();
+   glPopMatrix();
+
    glPushMatrix();
    glTranslatef(100, 0, 0);
    if (obj & OBJ_CUB)

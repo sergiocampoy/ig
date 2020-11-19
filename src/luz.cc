@@ -38,9 +38,7 @@ LuzDireccional::LuzDireccional (
    this->colorEspecular = colorEspecular;
 
    // posicion
-   this->posicion(0) = direccion(0);
-   this->posicion(1) = direccion(1);
-   this->posicion(3) = 0; // direccional
+   this->posicion = {0, 0, 1, 0};
 
    // Asigna valor de la dirección
    alpha = direccion(0);
@@ -50,13 +48,11 @@ LuzDireccional::LuzDireccional (
 void LuzDireccional::VariarAnguloAlpha (float incremento)
 {
    alpha += incremento;
-   posicion(0) = alpha;
 }
 
 void LuzDireccional::VariarAnguloBeta (float incremento)
 {
    beta += incremento;
-   posicion(1) = beta;
 }
 
 
