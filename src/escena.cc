@@ -11,22 +11,22 @@
 
 Escena::Escena()
 {
-    Front_plane       = 50.0;
+    Front_plane       = 40.0;
     Back_plane        = 2000.0;
     Observer_distance = 4*Front_plane;
     Observer_angle_x  = 0.0 ;
     Observer_angle_y  = 0.0 ;
 
-    ejes.changeAxisSize( 5000 );
+    ejes.changeAxisSize( 4000 );
 
-   cubo = new Cubo(50, Tupla3f(0, 0, 0));
-   tetraedro = new Tetraedro(50);
+   cubo = new Cubo(40, Tupla3f(0, 0, 0));
+   tetraedro = new Tetraedro(40);
    ply = new ObjPLY("./plys/ori.ply");
 
    rev = new ObjRevolucion("./plys/peon.ply", 16, 1, true, true);
-   //rev = new Cono(16, 16, 1, 1);
-   //rev = new Cilindro(4, 16, 1, 1);
-   //rev = new Esfera(16, 16, 1);
+   cono = new Cono(4, 16, 1, 1);
+   cilindro = new Cilindro(4, 16, 1, 1);
+   esfera = new Esfera(16, 16, 1);
 }
 
 //**************************************************************************
@@ -89,12 +89,36 @@ void Escena::dibujar()
       ply->draw(vis, vbo);
    glPopMatrix();
 
+   // Objetos de revolución
    glPushMatrix();
-   //glTranslatef(0, 0, 100);
-   glScalef(50, 50, 50);
+   glTranslatef(0, 0, 40);
+   glScalef(20, 20, 20);
    if (obj & OBJ_REV)
       rev->draw(vis, vbo, obj & OBJ_TAP);
    glPopMatrix();
+   
+   glPushMatrix();
+   glTranslatef(0, 0, -40);
+   glScalef(20, 20, 20);
+   if (obj & OBJ_REV)
+      cono->draw(vis, vbo, obj & OBJ_TAP);
+   glPopMatrix();
+   
+   glPushMatrix();
+   glTranslatef(40, 0, 0);
+   glScalef(20, 20, 20);
+   if (obj & OBJ_REV)
+      cilindro->draw(vis, vbo, obj & OBJ_TAP);
+   glPopMatrix();
+   
+   glPushMatrix();
+   glTranslatef(-40, 0, 0);
+   glScalef(20, 20, 20);
+   if (obj & OBJ_REV)
+      esfera->draw(vis, vbo, obj & OBJ_TAP);
+   glPopMatrix();
+   
+   
 }
 
 //**************************************************************************

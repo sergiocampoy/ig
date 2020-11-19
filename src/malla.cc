@@ -12,6 +12,7 @@
 
 void Malla3D::draw_ModoInmediato(unsigned int modo_vis)
 {
+   int t = (tam == -1) ? f.size() : tam;
    
    glEnableClientState(GL_VERTEX_ARRAY);
    glEnableClientState(GL_COLOR_ARRAY);
@@ -26,7 +27,7 @@ void Malla3D::draw_ModoInmediato(unsigned int modo_vis)
 
       glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
       glColorPointer(3, GL_FLOAT, 0, c_p.data());
-      glDrawElements(GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data());
+      glDrawElements(GL_TRIANGLES, t*3, GL_UNSIGNED_INT, f.data());
 
       glEnable(GL_CULL_FACE);
    }
@@ -37,7 +38,7 @@ void Malla3D::draw_ModoInmediato(unsigned int modo_vis)
       
       glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
       glColorPointer(3, GL_FLOAT, 0, c_l.data());
-      glDrawElements(GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data());
+      glDrawElements(GL_TRIANGLES, t*3, GL_UNSIGNED_INT, f.data());
 
       glEnable(GL_CULL_FACE);
    }
@@ -46,7 +47,7 @@ void Malla3D::draw_ModoInmediato(unsigned int modo_vis)
    if (modo_vis & VIS_SOL) {
       glPolygonMode(GL_FRONT, GL_FILL);
       glColorPointer(3, GL_FLOAT, 0, c_s.data());
-      glDrawElements(GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data());
+      glDrawElements(GL_TRIANGLES, t*3, GL_UNSIGNED_INT, f.data());
    }
 
 
@@ -61,6 +62,8 @@ void Malla3D::draw_ModoInmediato(unsigned int modo_vis)
 
 void Malla3D::draw_ModoDiferido(unsigned int modo_vis)
 {
+   int t = (tam == -1) ? f.size() : tam;
+
    // Crea los VBOs (solo la primera vez que se llama a la función)
    if (id_vbo_ver == 0)
       id_vbo_ver = CrearVBO(GL_ARRAY_BUFFER, v.size()*3*sizeof(float), v.data());
@@ -101,7 +104,7 @@ void Malla3D::draw_ModoDiferido(unsigned int modo_vis)
       glBindBuffer(GL_ARRAY_BUFFER, 0);
    
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri); // activa el VBO
-      glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, 0); // pinta
+      glDrawElements(GL_TRIANGLES, 3*t, GL_UNSIGNED_INT, 0); // pinta
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // desactiva el VBO
 
       glEnable(GL_CULL_FACE);
@@ -118,7 +121,7 @@ void Malla3D::draw_ModoDiferido(unsigned int modo_vis)
       glBindBuffer(GL_ARRAY_BUFFER, 0);
    
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri); // activa el VBO
-      glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, 0); // pinta
+      glDrawElements(GL_TRIANGLES, 3*t, GL_UNSIGNED_INT, 0); // pinta
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // desactiva el VBO
       
       glEnable(GL_CULL_FACE);
@@ -134,7 +137,7 @@ void Malla3D::draw_ModoDiferido(unsigned int modo_vis)
       glBindBuffer(GL_ARRAY_BUFFER, 0);
    
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri); // activa el VBO
-      glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, 0); // pinta
+      glDrawElements(GL_TRIANGLES, 3*t, GL_UNSIGNED_INT, 0); // pinta
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // desactiva el VBO
    }
 
@@ -191,6 +194,9 @@ GLuint CrearVBO(GLuint tipo_vbo, GLuint size_bytes, GLvoid* puntero_ram)
 
 void Malla3D::draw_ModoInmediato_Ajedrez()
 {
+   int ti = (tam_imp == -1) ? f_imp.size() : tam_imp;
+   int tp = (tam_par == -1) ? f_par.size() : tam_par;
+
    glEnableClientState(GL_VERTEX_ARRAY);
    glEnableClientState(GL_COLOR_ARRAY);
 
@@ -211,10 +217,10 @@ void Malla3D::draw_ModoInmediato_Ajedrez()
    glPolygonMode(GL_FRONT, GL_FILL);
 
    glColorPointer(3, GL_FLOAT, 0, c_l.data());
-   glDrawElements(GL_TRIANGLES, f_par.size()*3, GL_UNSIGNED_INT, f_par.data());
+   glDrawElements(GL_TRIANGLES, tp*3, GL_UNSIGNED_INT, f_par.data());
 
    glColorPointer(3, GL_FLOAT, 0, c_p.data());
-   glDrawElements(GL_TRIANGLES, f_imp.size()*3, GL_UNSIGNED_INT, f_imp.data());
+   glDrawElements(GL_TRIANGLES, ti*3, GL_UNSIGNED_INT, f_imp.data());
 
 
    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // lo deja como estaba
@@ -237,6 +243,8 @@ void Malla3D::draw_ModoDiferido_Ajedrez()
       }
    }
 
+   int ti = (tam_imp == -1) ? f_imp.size() : tam_imp;
+   int tp = (tam_par == -1) ? f_par.size() : tam_par;
 
    // Crea los vbos (solo una vez)
    if (id_vbo_tri_par == 0)
@@ -264,7 +272,7 @@ void Malla3D::draw_ModoDiferido_Ajedrez()
    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri_par); // activa el VBO
-   glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, 0); // pinta
+   glDrawElements(GL_TRIANGLES, 3*tp, GL_UNSIGNED_INT, 0); // pinta
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // desactiva el VBO
 
 
@@ -274,7 +282,7 @@ void Malla3D::draw_ModoDiferido_Ajedrez()
    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri_imp); // activa el VBO
-   glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, 0); // pinta
+   glDrawElements(GL_TRIANGLES, 3*ti, GL_UNSIGNED_INT, 0); // pinta
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // desactiva el VBO
 
 

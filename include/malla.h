@@ -42,6 +42,13 @@ class Malla3D
    void calcular_normales() ; // calcula tabla de normales de vértices (práctica 3)
    void colorea();
 
+   /// Tamaño del vector de caras a dibujar (-1 usa f.size())
+   int tam = -1;
+   /// Tamaño del vector impar de caras (-1 usa f.size())
+   int tam_imp = -1;
+   /// Tamaño del vector par de caras (-1 usa f.size())
+   int tam_par = -1;
+
    std::vector<Tupla3f> v ; // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
    std::vector<Tupla3i> f ; // una terna de 3 enteros por cada cara o triángulo
    std::vector<Tupla3f> c ; // tabla de colores de los vértices (una tupla por vértice, con tres floats)

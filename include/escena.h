@@ -46,6 +46,10 @@ class Escena
    ObjPLY * ply = nullptr;
    ObjRevolucion* rev = nullptr;
 
+   ObjRevolucion* cono = nullptr;
+   ObjRevolucion* esfera = nullptr;
+   ObjRevolucion* cilindro = nullptr;
+
    // menú
    void help(menu modoMenu);
    void info(unsigned int obj, unsigned int vis, bool vbo);
