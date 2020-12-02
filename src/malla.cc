@@ -158,6 +158,8 @@ void Malla3D::draw(unsigned int modo_vis, bool vbo)
    else
       draw_ModoInmediato(modo_vis);
    */
+   
+   m.aplicar();
 
    if (vbo) {
       if (modo_vis & VIS_AJE) {

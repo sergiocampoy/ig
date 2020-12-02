@@ -27,7 +27,13 @@ Escena::Escena()
    cilindro = new Cilindro(4, 16, 1, 1);
    esfera = new Esfera(16, 16, 1);
 
-
+   luz_pos = new LuzPosicional (
+      {0, 100, 0},
+      GL_LIGHT0,
+      {1, 1, 1, 1},
+      {1, 1, 1, 1},
+      {1, 1, 1, 1}
+   );
 }
 
 //**************************************************************************
@@ -55,6 +61,7 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
    // Fast Setup
    glEnable(GL_LIGHTING);
    glEnable(GL_LIGHT0);
+   glShadeModel(GL_FLAT);
 }
 
 
@@ -76,6 +83,8 @@ void Escena::dibujar()
    glDisable(GL_LIGHTING);
    ejes.draw();
    if (luz) { glEnable(GL_LIGHTING); }
+
+   luz_pos->activar();
 
    /*
    glPushMatrix();
