@@ -8,11 +8,21 @@
 #include "objply.h"
 #include "objrevolucion.h"
 
+#include "luz.h"
+
 // #include "esfera.h"
 
 #include "menu.h"
 
-typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, SELTAPAS} menu;
+typedef enum {
+    NADA,
+    SELOBJETO,
+    SELVISUALIZACION,
+    SELDIBUJADO,
+    SELTAPAS,
+    SELILUMIACION
+} menu;
+
 class Escena
 {
 
@@ -49,6 +59,9 @@ class Escena
    ObjRevolucion* cono = nullptr;
    ObjRevolucion* esfera = nullptr;
    ObjRevolucion* cilindro = nullptr;
+
+   LuzPosicional*  luz_pos = nullptr;
+   LuzDireccional* luz_dir = nullptr;
 
    // menú
    void help(menu modoMenu);

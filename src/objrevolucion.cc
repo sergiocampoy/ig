@@ -173,10 +173,14 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
       }
    }
 
+   // Crea las tapas si es necesario
    tamSinTapas = f.size();
    tamParSinTapas = ceil(f.size()/2);
    tamImpSinTapas = floor(f.size()/2);
    creaTapas(perfil_ascendente, num_instancias, eje);
+
+   // Calcula las normales para la iluminación
+   calcular_normales();
 }
 
 void ObjRevolucion::creaTapas(

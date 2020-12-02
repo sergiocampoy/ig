@@ -11,6 +11,7 @@
 #define MALLA3D_H_INCLUDED
 
 #include "aux.h"
+#include "material.h"
 
 // *****************************************************************************
 //
@@ -66,6 +67,16 @@ class Malla3D
    GLuint id_vbo_col_pun = 0, id_vbo_col_lin = 0, id_vbo_col_sol = 0;
    GLuint id_vbo_tri_par = 0, id_vbo_tri_imp = 0;
 
+
+
+   // P3
+
+   /// Tabla de normales de las caras
+   std::vector<Tupla3f> n_c;
+   /// Tabla de normales de los vértices
+   std::vector<Tupla3f> n_v;
+   /// Material
+   Material m;
 } ;
 
 GLuint CrearVBO(GLuint tipo_vbo, GLuint size_bytes, GLvoid* puntero_ram);

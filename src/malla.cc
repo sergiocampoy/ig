@@ -311,3 +311,46 @@ void Malla3D::colorea()
    for (unsigned int i = 0; i < v.size(); i++)
       c_p.push_back(c_puntos);
 }
+
+void Malla3D::calcular_normales () {
+   // Inicializa a 0 la tabla de normales de los vértices
+   for (auto cara : f) {
+      n_v.emplace_back(0, 0, 0);
+   }
+   
+   // Calcula la tabla de normales de las caras
+   for (auto cara : f) {
+      Tupla3f p, q, r;
+      Tupla3f a, b;
+      Tupla3f m, n;
+
+      // Obtiene los 3 vértices de la cara
+      p = v[cara(0)];
+      q = v[cara(1)];
+      r = v[cara(2)];
+
+      // Calcula los vectores a y b
+      a = q - p;
+      b = r - p;
+
+      // vector perpendicular
+      m = a.cross(b);
+
+      // vector normalizado
+      n = m.normalized();
+
+      // añade el vector normalizado a la tabla
+      n_c.push_back(n);
+
+      // suma el resultado a los vértices de la cara
+      n_v.at(cara(0)) = n_v.at(cara(0)) + n;
+      n_v.at(cara(1)) = n_v.at(cara(1)) + n;
+      n_v.at(cara(2)) = n_v.at(cara(2)) + n;
+   }
+
+   // Normaliza
+   for (unsigned int i = 0; i < n_v.size(); i++) {
+      if (n_v[i].lengthSq() > 0)
+         n_v[i] = n_v[i].normalized();
+   }
+}

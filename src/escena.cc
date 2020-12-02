@@ -4,7 +4,6 @@
 #include "escena.h"
 #include "malla.h" // objetos: Cubo y otros....
 
-
 //**************************************************************************
 // constructor de la escena (no puede usar ordenes de OpenGL)
 //**************************************************************************
@@ -27,6 +26,8 @@ Escena::Escena()
    cono = new Cono(4, 16, 1, 1);
    cilindro = new Cilindro(4, 16, 1, 1);
    esfera = new Esfera(16, 16, 1);
+
+
 }
 
 //**************************************************************************
@@ -42,12 +43,18 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
    glEnable(GL_CULL_FACE);
+   // P3
+   glEnable(GL_NORMALIZE);
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
 
    change_projection( float(UI_window_width)/float(UI_window_height) );
 	glViewport( 0, 0, UI_window_width, UI_window_height );
+
+   // Fast Setup
+   glEnable(GL_LIGHTING);
+   glEnable(GL_LIGHT0);
 }
 
 
@@ -63,12 +70,14 @@ void Escena::dibujar()
 {
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
 	change_observer();
-    ejes.draw();
-    // COMPLETAR
-    //   Dibujar los diferentes elementos de la escena
-    // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
-    // y hacer 
+   
+   // dibuja los ejes (desactiva la luz si está activada)
+   bool luz = glIsEnabled(GL_LIGHTING);
+   glDisable(GL_LIGHTING);
+   ejes.draw();
+   if (luz) { glEnable(GL_LIGHTING); }
 
+   /*
    glPushMatrix();
    glTranslatef(100, 0, 0);
    if (obj & OBJ_CUB)
@@ -110,14 +119,14 @@ void Escena::dibujar()
    if (obj & OBJ_REV)
       cilindro->draw(vis, vbo, obj & OBJ_TAP);
    glPopMatrix();
+   */
    
    glPushMatrix();
-   glTranslatef(-40, 0, 0);
-   glScalef(20, 20, 20);
+   // glTranslatef(-40, 0, 0);
+   glScalef(50, 50, 50);
    if (obj & OBJ_REV)
       esfera->draw(vis, vbo, obj & OBJ_TAP);
    glPopMatrix();
-   
    
 }
 
@@ -183,8 +192,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          help(modoMenu);
       break;
       case 'I':
-         // Información
-         info(obj, vis, vbo);
+         if (modoMenu == SELVISUALIZACION) {
+            
+         }
       break;
       case 'L':
          if (modoMenu == SELVISUALIZACION) {
@@ -319,7 +329,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             help(modoMenu);
          }
       break;
-      case '1' :
+      case '1':
          if (modoMenu == SELDIBUJADO) {
             vbo = false;
             cout << "Modo inmediato " << FGRN("activado") << endl;
@@ -330,7 +340,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             help(modoMenu);
          }
       break;
-      case '2' :
+      case '2':
          if (modoMenu == SELDIBUJADO) {
             vbo = true;
             cout << "Modo diferido " << FRED("activado") << endl;
@@ -340,6 +350,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             cout << FRED("Opción inválida") << endl;
             help(modoMenu);
          }
+      break;
+      case '.':
+         // Información
+         info(obj, vis, vbo);
       break;
       default:
          cout << FRED("Opción inválida") << endl;
