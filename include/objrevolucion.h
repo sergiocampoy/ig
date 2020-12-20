@@ -47,7 +47,13 @@ public:
    // Método para dibujar (con o sin tapas)
    void draw(unsigned int modo_vis, bool vbo, bool tapas) ;
 
+   void calculaTexturas();
+
 protected:
+
+   int ancho = 0;
+   int alto = 0;
+
    /// crea los vectores de vértices y caras a partir de un perfil
    void crearMalla(
       std::vector<Tupla3f> perfil_original,
@@ -64,6 +70,8 @@ protected:
       bool tapa_sup=true,
       bool tapa_inf=true
    );
+
+   //void calculaTexturas();
 
 private:
    // TBD

@@ -8,7 +8,7 @@
 #include "objply.h"
 #include "objrevolucion.h"
 
-// #include "esfera.h"
+#include "cuadro.h"
 
 #include "menu.h"
 
@@ -50,11 +50,13 @@ class Escena
    ObjRevolucion* esfera = nullptr;
    ObjRevolucion* cilindro = nullptr;
 
+   Cuadro* cuadro = nullptr;
+
    // menú
    void help(menu modoMenu);
    void info(unsigned int obj, unsigned int vis, bool vbo);
    unsigned int obj = OBJ_ALL; // default = visualiza todos los objs
-   unsigned int vis = VIS_SOL; // default = visualiza en modo sólido
+   unsigned int vis = VIS_SOL + VIS_TEX; // default = visualiza en modo sólido
    bool vbo = true;            // default = dibuja en VBO
    bool light_mode = false;
    

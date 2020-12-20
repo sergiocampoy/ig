@@ -44,61 +44,6 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, i
 
 void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, int eje, bool tapa_sup, bool tapa_inf)
 {
-   /*
-   std::vector<Tupla3f> perfil_ascendente;
-   Tupla3f aux;
-   float alpha = (2.0*M_PI) / (float)num_instancias;
-
-   // comprueba que los puntos se dan en orden ascendente (invierte si no)
-   if (perfil_original.front()(eje) < perfil_original.back()(eje)) {
-      perfil_ascendente = perfil_original;
-   } else {
-      for (auto p : perfil_original)
-         perfil_ascendente.insert(perfil_ascendente.begin(), p);
-   }
-
-   // calcula distancias de los puntos al eje de rotación
-   std::vector<float> modulos;
-   for (auto p : perfil_ascendente)
-   {
-      p(eje) = 0;
-      modulos.push_back(sqrt(p.lengthSq()));
-   }
-
-
-   // rellena el vector de vértices
-   for (unsigned int i = 0; i < num_instancias; i++)
-   {
-      for (unsigned int j = 0; j < perfil_ascendente.size(); j++)
-      {
-         aux(eje) = (perfil_ascendente[j])(eje);
-         aux((eje+1)%3) = (modulos[j] * sin(alpha*i));
-         aux((eje+2)%3) = (modulos[j] * cos(alpha*i));
-
-         v.push_back(aux);
-      }
-   }
-
-   // rellena el vector de caras
-   unsigned int n = 0, tam = perfil_ascendente.size();
-   for (unsigned int i = 0; i < num_instancias; i++)
-   {
-      n = i*tam;
-      for (unsigned int j = 0; j < tam-1; j++)
-      {
-         f.push_back(Tupla3i(j+n, j+n+1, (j+n+tam)%(tam*num_instancias)));
-         f.push_back(Tupla3i(j+n+1, (j+n+tam+1)%(tam*num_instancias), (j+n+tam)%(tam*num_instancias)));
-      }
-   }
-
-   // Detecta y crea las tapas si es necesario
-   if (tapa_sup && !(modulos.back() == 0))
-      tapaSup = new ObjRevolucion(v.back(), num_instancias, eje, true);
-
-   if (tapa_inf && !(modulos.front() == 0))
-      tapaInf = new ObjRevolucion(v.front(), num_instancias, eje, false);
-   */
-
    const float ALPHA = (2.0*M_PI) / (float)num_instancias;
    std::vector<Tupla3f> perfil_ascendente;
    Tupla3f aux, centroSup;
@@ -132,6 +77,9 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
       perfil_ascendente.push_back(aux);
    }
 
+   ancho = num_instancias;
+   alto = perfil_ascendente.size()-2;
+
    // calcula las distancias de los puntos al eje de rotación
    std::vector<float> modulos;
    for (auto p : perfil_ascendente) {
@@ -144,8 +92,8 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    const unsigned int J = perfil_ascendente.size()-2; // sin las tapas
    const unsigned int TOTAL = I*J;
 
-   v.push_back(perfil_ascendente.front());
-   for (unsigned int i = 0; i < I; i++) {
+   // v.push_back(perfil_ascendente.front());
+   for (unsigned int i = 0; i <= I; i++) {
       for (unsigned int j = 0; j < J; j++) {
          aux(eje) = (perfil_ascendente[j+1])(eje);
          aux((eje+1)%3) = modulos[j+1] * sin(ALPHA*i);
@@ -154,10 +102,12 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
          v.push_back(aux);
       }
    }
+   v.push_back(perfil_ascendente.front());
    v.push_back(perfil_ascendente.back());
 
 
    // rellena el vector de caras
+   /*
    for (unsigned int i = 0; i < I; i++) {
       for (unsigned int j = 0; j < J-1; j++) {
          f.emplace_back(
@@ -169,6 +119,21 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
             1 + (J*i     + j+1)%TOTAL,
             1 + (J*(i+1) + j+1)%TOTAL,
             1 + (J*(i+1) + j  )%TOTAL
+         );
+      }
+   }
+   */
+   for (unsigned int i = 0; i < I; i++) {
+      for (unsigned int j = 0; j < J-1; j++) {
+         f.emplace_back(
+            (J*i     + j  )%TOTAL,
+            (J*i     + j+1)%TOTAL,
+            (J*(i+1) + j  )
+         );
+         f.emplace_back(
+            (J*i     + j+1)%TOTAL,
+            (J*(i+1) + j+1),
+            (J*(i+1) + j  )
          );
       }
    }
@@ -193,9 +158,9 @@ void ObjRevolucion::creaTapas(
 
    if (tapa_inf) {
       for (unsigned int i = 0; i < I; i++) {
-         aux(eje)       = 0;
-         aux((eje+1)%3) = 1 + J*i;
-         aux((eje+2)%3) = 1 + (J*(i+1))%TOTAL;
+         aux(eje)       = TOTAL+J;
+         aux((eje+1)%3) = J*i;
+         aux((eje+2)%3) = (J*(i+1))%TOTAL;
 
          f.push_back(aux);
       }
@@ -203,9 +168,9 @@ void ObjRevolucion::creaTapas(
 
    if (tapa_sup) {
       for (unsigned int i = 0; i < I; i++) {
-         aux(eje)       = TOTAL+1;
-         aux((eje+1)%3) = 1 + (J*(i+1) + J-1)%TOTAL;
-         aux((eje+2)%3) = 1 + J*i      + J-1;
+         aux(eje)       = TOTAL+J+1;
+         aux((eje+1)%3) = (J*(i+1) + J-1)%TOTAL;
+         aux((eje+2)%3) = J*i      + J-1;
          
          f.push_back(aux);
       }
@@ -285,6 +250,7 @@ Cilindro::Cilindro (
    }
 
    crearMalla(perfil, num_instancias_perf, 1, true, true);
+   calculaTexturas();
    colorea();
 }
 
@@ -329,4 +295,18 @@ Esfera::Esfera (
 
    crearMalla(perfil, num_instancias_perf, 1, false, false);
    colorea();
+}
+
+void ObjRevolucion::calculaTexturas() {
+   const unsigned int I = ancho;
+   const unsigned int J = alto; // sin las tapas
+   const unsigned int TOTAL = I*J;
+
+   printf("%d, %d\n", ancho, alto);
+
+   for (unsigned int i = 0; i <= I; i++) {
+      for (unsigned int j = 0; j < J; j++) {
+         c_t.emplace_back((1-(float)(i)/(I)), 1-(float)(j)/(J-1));
+      }
+   }
 }

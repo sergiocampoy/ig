@@ -12,12 +12,13 @@
 
 
 // selección de modo de visualización
-#define VIS_ALL 0b1111
+#define VIS_ALL 0b11111
 
 #define VIS_PUN 0b1
 #define VIS_LIN 0b10
 #define VIS_SOL 0b100
 #define VIS_AJE 0b1000
+#define VIS_TEX 0b10000
 
 
 // colores terminal

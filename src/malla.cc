@@ -45,9 +45,14 @@ void Malla3D::draw_ModoInmediato(unsigned int modo_vis)
 
    // modo sólido
    if (modo_vis & VIS_SOL) {
+      if (textura != nullptr && (modo_vis & VIS_TEX))
+         glEnable(GL_TEXTURE_2D);
+
       glPolygonMode(GL_FRONT, GL_FILL);
       glColorPointer(3, GL_FLOAT, 0, c_s.data());
       glDrawElements(GL_TRIANGLES, t*3, GL_UNSIGNED_INT, f.data());
+
+      glDisable(GL_TEXTURE_2D);
    }
 
 
@@ -130,6 +135,9 @@ void Malla3D::draw_ModoDiferido(unsigned int modo_vis)
    // modo sólido
    if (modo_vis & VIS_SOL)
    {
+      if (textura != nullptr && (modo_vis & VIS_TEX))
+         glEnable(GL_TEXTURE_2D);
+
       glPolygonMode(GL_FRONT, GL_FILL);
 
       glBindBuffer(GL_ARRAY_BUFFER, id_vbo_col_sol);
@@ -139,6 +147,8 @@ void Malla3D::draw_ModoDiferido(unsigned int modo_vis)
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri); // activa el VBO
       glDrawElements(GL_TRIANGLES, 3*t, GL_UNSIGNED_INT, 0); // pinta
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // desactiva el VBO
+
+      glDisable(GL_TEXTURE_2D);
    }
 
    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -159,6 +169,14 @@ void Malla3D::draw(unsigned int modo_vis, bool vbo)
       draw_ModoInmediato(modo_vis);
    */
 
+   // Si hay texturas, las dibuja
+   // printf("%u\n", c_t.size());
+   if (textura != nullptr) {
+      glEnableClientState (GL_TEXTURE_COORD_ARRAY);
+      glTexCoordPointer (2, GL_FLOAT, 0, c_t.data());
+      textura->activar();
+   }
+
    if (vbo) {
       if (modo_vis & VIS_AJE) {
          draw_ModoDiferido_Ajedrez();
@@ -173,6 +191,7 @@ void Malla3D::draw(unsigned int modo_vis, bool vbo)
       }
    }
 
+   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 GLuint CrearVBO(GLuint tipo_vbo, GLuint size_bytes, GLvoid* puntero_ram)
@@ -310,4 +329,17 @@ void Malla3D::colorea()
    // color puntos
    for (unsigned int i = 0; i < v.size(); i++)
       c_p.push_back(c_puntos);
+}
+
+
+void Malla3D::setTextura (std::string fichero) {
+   if (textura != nullptr) {
+      delete textura;
+   }
+   textura = new Textura(fichero);
+   //calculaTexturas();
+}
+
+void Malla3D::calculaTexturas () {
+   printf("malla::calculaTexturas\n");
 }

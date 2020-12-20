@@ -11,6 +11,7 @@
 #define MALLA3D_H_INCLUDED
 
 #include "aux.h"
+#include "textura.h"
 
 // *****************************************************************************
 //
@@ -36,6 +37,11 @@ class Malla3D
    // está función llama a 'draw_ModoInmediato' (modo inmediato)
    // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
    void draw(unsigned int modo_vis, bool) ;
+
+   void setTextura (std::string fichero);
+
+   void calculaTexturas();
+
 
    protected:
 
@@ -65,6 +71,13 @@ class Malla3D
    GLuint id_vbo_ver = 0, id_vbo_tri = 0, id_vbo_col = 0; // inicializados a 0
    GLuint id_vbo_col_pun = 0, id_vbo_col_lin = 0, id_vbo_col_sol = 0;
    GLuint id_vbo_tri_par = 0, id_vbo_tri_imp = 0;
+
+   // P5
+
+   /// Tabla de coordenadas de textura
+   std::vector<Tupla2f>c_t;
+   /// Objeto de textura
+   Textura* textura = nullptr;
 
 } ;
 

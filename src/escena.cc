@@ -27,6 +27,11 @@ Escena::Escena()
    cono = new Cono(4, 16, 1, 1);
    cilindro = new Cilindro(4, 16, 1, 1);
    esfera = new Esfera(16, 16, 1);
+
+   cuadro = new Cuadro();
+   cuadro->setTextura("madera");
+
+   cilindro->setTextura("lata1");
 }
 
 //**************************************************************************
@@ -68,7 +73,25 @@ void Escena::dibujar()
     //   Dibujar los diferentes elementos de la escena
     // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
     // y hacer 
+   
 
+   
+   glPushMatrix();
+   glTranslatef(-150, -150, -50);
+   glScalef(300, 300, 0);
+   if (obj & OBJ_CUB)
+      cuadro->draw(vis, vbo);
+   glPopMatrix();
+   
+   
+   glPushMatrix();
+   glTranslatef(0, -25, 0);
+   glScalef(25, 50, 25);
+   if (obj & OBJ_REV)
+      cilindro->draw(vis, vbo, true);
+   glPopMatrix();
+
+   /*
    glPushMatrix();
    glTranslatef(100, 0, 0);
    if (obj & OBJ_CUB)
@@ -103,12 +126,12 @@ void Escena::dibujar()
    if (obj & OBJ_REV)
       cono->draw(vis, vbo, obj & OBJ_TAP);
    glPopMatrix();
-   
+   */
    glPushMatrix();
    glTranslatef(40, 0, 0);
    glScalef(20, 20, 20);
    if (obj & OBJ_REV)
-      cilindro->draw(vis, vbo, obj & OBJ_TAP);
+      cono->draw(vis, vbo, obj & OBJ_TAP);
    glPopMatrix();
    
    glPushMatrix();
@@ -117,7 +140,7 @@ void Escena::dibujar()
    if (obj & OBJ_REV)
       esfera->draw(vis, vbo, obj & OBJ_TAP);
    glPopMatrix();
-   
+
    
 }
 
@@ -298,7 +321,15 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             } else {
                cout << "Tetraedro " << FRED("desactivado") << endl;
             }
-         } else {
+         } else if (modoMenu == SELVISUALIZACION) {
+            // Activa/desactiva modo sólido
+            vis ^= VIS_TEX;
+            if (vis & VIS_TEX) {
+               cout << "Texturas " << FGRN("activadas") << endl;
+            } else {
+               cout << "Texturas " << FRED("desactivadas") << endl;
+            }
+         }{
             cout << FRED("Opción inválida") << endl;
             help(modoMenu);
          }
