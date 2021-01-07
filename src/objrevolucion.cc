@@ -244,7 +244,7 @@ Cilindro::Cilindro (
    for (unsigned int i = 0; i < num_vert_perfil; i++) {
       perfil.emplace_back (
          radio,
-         altura*((float)i/(num_vert_perfil-1)),
+         altura*((float)i/(num_vert_perfil-1)) - altura/2,
          0
       );
    }

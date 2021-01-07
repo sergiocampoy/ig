@@ -28,7 +28,7 @@ en_linux        := $(findstring Linux,$(uname)) # "Linux" o ""
 compiler        := $(if $(en_linux), g++, clang++ ) # "g++" o "clang++"
 sistoper        := $(if $(en_macos), macOS, Linux ) # "macOS" o "Linux"
 
-cc_flags_common := -std=c++11 -g -I/usr/include -Iinclude
+cc_flags_common := -std=c++11 -g -I/usr/include -Iinclude -Wall
 cc_flags_linux  := -DLINUX
 cc_flags_macos  := -DMACOS
 cc_flags        := $(cc_flags_common) $(if $(en_linux), $(cc_flags_linux), $(cc_flags_macos))

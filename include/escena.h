@@ -8,11 +8,13 @@
 #include "objply.h"
 #include "objrevolucion.h"
 
+#include "flexo.h"
+
 #include "cuadro.h"
 
 #include "menu.h"
 
-typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, SELTAPAS} menu;
+typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, SELTAPAS, ANIMACION, AMANUAL} menu;
 class Escena
 {
 
@@ -33,7 +35,7 @@ class Escena
     // Transformación de cámara
 	void change_projection( const float ratio_xy );
 	void change_observer();
-    
+
 
 
    void clear_window();
@@ -52,6 +54,8 @@ class Escena
 
    Cuadro* cuadro = nullptr;
 
+   Flexo* flexo = nullptr;
+
    // menú
    void help(menu modoMenu);
    void info(unsigned int obj, unsigned int vis, bool vbo);
@@ -59,6 +63,9 @@ class Escena
    unsigned int vis = VIS_SOL + VIS_TEX; // default = visualiza en modo sólido
    bool vbo = true;            // default = dibuja en VBO
    bool light_mode = false;
+   unsigned int grd_libertad = 0b111;
+
+   bool animacion_automatica = false;
    
    public:
 
@@ -72,6 +79,8 @@ class Escena
 	// Interacción con la escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;
 	void teclaEspecial( int Tecla1, int x, int y );
+    void animarModeloJerarquico();
+    
 
 };
 #endif

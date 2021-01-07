@@ -32,6 +32,8 @@ Escena::Escena()
    cuadro->setTextura("madera");
 
    cilindro->setTextura("lata1");
+
+   flexo = new Flexo(16);
 }
 
 //**************************************************************************
@@ -63,19 +65,24 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 // y dibuja los objetos
 //
 // **************************************************************************
-
+int sergio = 0;
 void Escena::dibujar()
 {
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
 	change_observer();
-    ejes.draw();
+   ejes.draw();
+
+   glPushMatrix();
+   glScalef(10, 10, 10);
+   flexo->draw(vis, vbo, true);
+   glPopMatrix();
+
     // COMPLETAR
     //   Dibujar los diferentes elementos de la escena
     // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
     // y hacer 
    
-
-   
+   /*
    glPushMatrix();
    glTranslatef(-150, -150, -50);
    glScalef(300, 300, 0);
@@ -90,7 +97,7 @@ void Escena::dibujar()
    if (obj & OBJ_REV)
       cilindro->draw(vis, vbo, true);
    glPopMatrix();
-
+*/
    /*
    glPushMatrix();
    glTranslatef(100, 0, 0);
@@ -127,20 +134,21 @@ void Escena::dibujar()
       cono->draw(vis, vbo, obj & OBJ_TAP);
    glPopMatrix();
    */
+  /*
    glPushMatrix();
-   glTranslatef(40, 0, 0);
+   glTranslatef(50, 0, 0);
    glScalef(20, 20, 20);
    if (obj & OBJ_REV)
       cono->draw(vis, vbo, obj & OBJ_TAP);
    glPopMatrix();
    
    glPushMatrix();
-   glTranslatef(-40, 0, 0);
+   glTranslatef(-50, 0, 0);
    glScalef(20, 20, 20);
    if (obj & OBJ_REV)
       esfera->draw(vis, vbo, obj & OBJ_TAP);
    glPopMatrix();
-
+*/
    
 }
 
@@ -176,6 +184,25 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             } else {
                obj = 0;
                cout << "Todos los objetos " << FRED("desactivados") << endl;
+            }
+         } else if (modoMenu == NADA) {
+            // Menú de animación
+            modoMenu = ANIMACION;
+            if (animacion_automatica) {
+               animacion_automatica = false;
+               cout << "Animacion automática " << FRED("desactivada") << endl;
+            } else {
+               animacion_automatica = true;
+               cout << "Animación automática " << FGRN("activada") << endl;
+            }
+            help(modoMenu);
+         } else if (modoMenu == ANIMACION) {
+            if (animacion_automatica) {
+               animacion_automatica = false;
+               cout << "Animacion automática " << FRED("desactivada") << endl;
+            } else {
+               animacion_automatica = true;
+               cout << "Animación automática " << FGRN("activada") << endl;
             }
          } else {
             cout << FRED("Opción inválida") << endl;
@@ -239,6 +266,17 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             obj &= ~OBJ_TAP;
             cout << "Tapas " << FRED("desactivadas") << endl;
             modoMenu = SELOBJETO;
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
+      break;
+      case 'M':
+         if (modoMenu == NADA) {
+            // Menú de animación manual
+            modoMenu = AMANUAL;
+            animacion_automatica = false;
+            help(modoMenu);
          } else {
             cout << FRED("Opción inválida") << endl;
             help(modoMenu);
@@ -350,12 +388,22 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             help(modoMenu);
          }
       break;
+      case '0':
+         if (modoMenu == AMANUAL || modoMenu == ANIMACION) {
+            grd_libertad = 0b111; // Selecciona todos los grados de libertad
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
+      break;
       case '1' :
          if (modoMenu == SELDIBUJADO) {
             vbo = false;
             cout << "Modo inmediato " << FGRN("activado") << endl;
             cout << "Modo diferido " << FRED("desactivado") << endl;
             cout << endl;
+         } else if (modoMenu == AMANUAL || modoMenu == ANIMACION) {
+            grd_libertad = 0b1; // Cabeza
          } else {
             cout << FRED("Opción inválida") << endl;
             help(modoMenu);
@@ -367,9 +415,62 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             cout << "Modo diferido " << FRED("activado") << endl;
             cout << "Modo inmediato " << FGRN("desactivado") << endl;
             cout << endl;
+         } else if (modoMenu == AMANUAL || modoMenu == ANIMACION) {
+            grd_libertad = 0b10; // Brazo
          } else {
             cout << FRED("Opción inválida") << endl;
             help(modoMenu);
+         }
+      break;
+      case '3':
+         if (modoMenu == AMANUAL || modoMenu == ANIMACION) {
+            grd_libertad = 0b100; // Altura
+         }
+      break;
+      case '+':
+         if (modoMenu == ANIMACION) {
+            if (grd_libertad & 0b001) {
+               flexo->modificarVelocidadCabeza(0.5);
+            }
+            if (grd_libertad & 0b010) {
+               flexo->modificarVelocidadBrazo(0.5);
+            }
+            if (grd_libertad & 0b100) {
+               flexo->modificarVelocidadAltura(0.5);
+            }
+         } else if (modoMenu == AMANUAL) {
+            if (grd_libertad & 0b001) {
+               flexo->modificaAnguloCabeza(180.0/20);
+            }
+            if (grd_libertad & 0b010) {
+               flexo->modificaAnguloBrazo(180.0/20);
+            }
+            if (grd_libertad & 0b100) {
+               flexo->modificaAltura(8.0/20);
+            }
+         }
+      break;
+      case '-':
+         if (modoMenu == ANIMACION) {
+            if (grd_libertad & 0b001) {
+               flexo->modificarVelocidadCabeza(-0.5);
+            }
+            if (grd_libertad & 0b010) {
+               flexo->modificarVelocidadBrazo(-0.5);
+            }
+            if (grd_libertad & 0b100) {
+               flexo->modificarVelocidadAltura(-0.5);
+            }
+         } else if (modoMenu == AMANUAL) {
+            if (grd_libertad & 0b001) {
+               flexo->modificaAnguloCabeza(-180.0/20);
+            }
+            if (grd_libertad & 0b010) {
+               flexo->modificaAnguloBrazo(-180.0/20);
+            }
+            if (grd_libertad & 0b100) {
+               flexo->modificaAltura(-8.0/20);
+            }
          }
       break;
       default:
@@ -458,7 +559,7 @@ void Escena::help(menu modoMenu)
       case NADA:
          printf(
             BOLD(FBLU("Menú principal:\n"))
-            "H - Muestra este menú\n"
+            ". - Muestra este menú\n"
             "I - Información de la escena\n"
             "L - Activar/Desactivar modo oscuro\n"
             "Q - Salir\n"
@@ -470,7 +571,7 @@ void Escena::help(menu modoMenu)
       case SELOBJETO:
          printf(
             BOLD(FBLU("Selección de objeto\n"))
-            "H - Muestra este menú\n"
+            ". - Muestra este menú\n"
             "I - Información de la escena\n"
             "Q - Volver al menú principal\n"
             "A - Activar/desactivar todos los objetos\n"
@@ -483,7 +584,7 @@ void Escena::help(menu modoMenu)
       case SELVISUALIZACION:
          printf(
             BOLD(FBLU("Selección de modo de visualización\n"))
-            "H - Muestra este menú\n"
+            ". - Muestra este menú\n"
             "I - Información de la escena\n"
             "Q - Volver al menú principal\n"
             "P - Activar/desactivar modo puntos\n"
@@ -495,11 +596,38 @@ void Escena::help(menu modoMenu)
       case SELDIBUJADO:
          printf(
             BOLD(FBLU("Selección de modo de dibujado\n"))
-            "H - Muestra este menú\n"
+            ". - Muestra este menú\n"
             "I - Información de la escena\n"
             "Q - Volver al menú principal\n"
             "1 - Visualizar mediante glDrawElements\n"
             "2 - Visualizar mediante VBOs\n"
+         );
+      break;
+      case ANIMACION:
+         printf(
+            BOLD(FBLU("Opciones de animación automática\n"))
+            ". - Muestra este menú\n"
+            "Q - Volver al menú principal\n"
+            "A - Activar/Desactivar animación automática\n"
+            "0 - Modificar todos los grados de libertad\n"
+            "1 - Modificar la cabeza\n"
+            "2 - Modificar el brazo\n"
+            "3 - Modificar el tronco\n"
+            "+ - Aumentar la velocidad\n"
+            "- - Disminuir la velocidad\n"
+         );
+      break;
+      case AMANUAL:
+         printf(
+            BOLD(FBLU("Opciones de animación manual\n"))
+            ". - Muestra este menú\n"
+            "Q - Volver al menú principal\n"
+            "0 - Modificar todos los grados de libertad\n"
+            "1 - Modificar la cabeza\n"
+            "2 - Modificar el brazo\n"
+            "3 - Modificar el tronco\n"
+            "+ - Aumentar el valor\n"
+            "- - Disminuir el valor\n"
          );
       break;
    }
@@ -564,3 +692,10 @@ void Escena::info(unsigned int obj, unsigned int vis, bool vbo)
 
      << endl;
 }
+
+
+void Escena::animarModeloJerarquico() {
+   if (animacion_automatica)
+      flexo->animarModeloJerarquico();
+}
+    
