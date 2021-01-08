@@ -2,7 +2,9 @@
 
 Cabeza::Cabeza (int n) {
     c = new Cilindro(n/2, n, 2, 1);
+    c->colorea({0, 0, 1});
     e = new Esfera(n, n, 1);
+    e->colorea({0, 0, 1});
 }
 
 void Cabeza::draw (unsigned int modo_vis, bool vbo, bool tapas) {
@@ -28,6 +30,7 @@ void Cabeza::draw (unsigned int modo_vis, bool vbo, bool tapas) {
 
 Brazo::Brazo (int n) {
     cil = new Cilindro (n/2, n, 2, 1);
+    cil->colorea({0.5, 0.5, 0.5});
     cab = new Cabeza (n);
 }
 
@@ -48,7 +51,9 @@ void Brazo::draw (unsigned int modo_vis, bool vbo, bool tapas, float alpha) {
 
 Cuerpo::Cuerpo (int n) {
     cil = new Cilindro (n/2, n, 2, 1);
+    cil->colorea({0, 0, 1});
     esf = new Esfera (n, n, 1);
+    esf->colorea({0, 0, 1});
     bra = new Brazo (n);
 }
 
@@ -74,6 +79,7 @@ void Cuerpo::draw (unsigned int modo_vis, bool vbo, bool tapas, float alpha, flo
 
 Flexo::Flexo (int n) {
     cil = new Cilindro (n/2, n, 2, 1);
+    cil->colorea({0, 0, 1});
     cue = new Cuerpo (n);
 
     /*

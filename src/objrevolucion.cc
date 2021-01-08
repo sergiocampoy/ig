@@ -32,14 +32,12 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, in
    ply::leer_vertices(num_vertices, vertices, src);
 
    crearMalla(vertices, num_instancias, eje, tapa_sup, tapa_inf);
-   colorea();
 }
 
 // *****************************************************************************
 // objeto de revolución obtenido a partir de un perfil (en un vector de puntos)
 ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, int eje, bool tapa_sup, bool tapa_inf) {
    crearMalla(archivo, num_instancias, eje, tapa_sup, tapa_inf);
-   colorea();
 }
 
 void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, int eje, bool tapa_sup, bool tapa_inf)
@@ -210,8 +208,6 @@ ObjRevolucion::ObjRevolucion(Tupla3f p, int num_instancias, int eje, bool tapa_s
       for (unsigned int i = 0; i < num_instancias; i++)
          f.push_back(Tupla3i(0, i+1, 1+(i+1)%num_instancias));
    }
-
-   colorea();
 }
 
 // dibuja primero las tapas y luego el ObjRevolución
@@ -251,7 +247,6 @@ Cilindro::Cilindro (
 
    crearMalla(perfil, num_instancias_perf, 1, true, true);
    calculaTexturas();
-   colorea();
 }
 
 
@@ -272,7 +267,6 @@ Cono::Cono (
    }
 
    crearMalla(perfil, num_instancias_perf, 1, false, true);
-   colorea();
 }
 
 
@@ -294,7 +288,6 @@ Esfera::Esfera (
    }
 
    crearMalla(perfil, num_instancias_perf, 1, false, false);
-   colorea();
 }
 
 void ObjRevolucion::calculaTexturas() {

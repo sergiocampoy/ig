@@ -17,8 +17,5 @@ Tetraedro::Tetraedro(float size)
    f.push_back(Tupla3i(3, 2, 1));
    f.push_back(Tupla3i(3, 1, 0));
    f.push_back(Tupla3i(3, 0, 2));
-
-
-   colorea();
 }
 

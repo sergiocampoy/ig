@@ -29,11 +29,25 @@ Escena::Escena()
    esfera = new Esfera(16, 16, 1);
 
    cuadro = new Cuadro();
-   cuadro->setTextura("madera");
+   cuadro->setTextura("minihabitacion");
 
    cilindro->setTextura("lata1");
 
    flexo = new Flexo(16);
+   habitacion = new Habitacion();
+   habitacion->setTextura("minihabitacion");
+
+   mesa = new Mesa (16);
+   monitor = new Monitor("rick");
+
+   lata = new Cilindro(4, 16, 3, 1);
+   lata->colorea({1, 1, 1});
+   lata->setTextura("lata1");
+
+   peon1 = new ObjRevolucion("./plys/peon.ply", 16, 1, true, true);
+   peon1->colorea({1, 1, 0});
+   peon2 = new ObjRevolucion("./plys/peon.ply", 16, 1, true, true);
+   peon2->colorea({0, 1, 1});
 }
 
 //**************************************************************************
@@ -73,8 +87,57 @@ void Escena::dibujar()
    ejes.draw();
 
    glPushMatrix();
-   glScalef(10, 10, 10);
-   flexo->draw(vis, vbo, true);
+      glScalef(500, 500, 500);
+      glRotatef(-90, 0, 1, 0);
+      glTranslatef(-0.5, -0.5, -0.5);
+      habitacion->draw(vis, vbo);
+   glPopMatrix();
+
+   glPushMatrix();
+      glTranslatef(0, -90, -170);
+      glScalef(4, 4, 4);
+      mesa->draw (vis, vbo, true);
+   glPopMatrix();
+   
+   glPushMatrix();
+      glTranslatef(120, -90, -200);
+      glScalef(5, 5, 5);
+      glRotatef(-135, 0, 1, 0);
+      flexo->draw(vis, vbo, true);
+   glPopMatrix();
+   
+   glPushMatrix();
+      //glTranslatef(120, -90, -200);
+      glScalef(5, 5, 5);
+      glRotatef(-135, 0, 1, 0);
+      flexo->draw(vis, vbo, true);
+   glPopMatrix();
+
+   glPushMatrix();
+      glTranslatef(0, -90, -200);
+      glScalef(40, 40, 40);
+      monitor->draw(vis, vbo);
+   glPopMatrix();
+
+   glPushMatrix();
+      glTranslatef(-120, -90, -210);
+      glScalef(10, 10, 10);
+      glTranslatef(0, 1.5, 0);
+      lata->draw(vis, vbo, true);
+   glPopMatrix();
+   
+   glPushMatrix();
+      glTranslatef(-25, -90, -140);
+      glScalef(20, 20, 20);
+      glTranslatef(0, 1.4, 0);
+      peon1->draw(vis, vbo, true);
+   glPopMatrix();
+   
+   glPushMatrix();
+      glTranslatef(25, -90, -140);
+      glScalef(20, 20, 20);
+      glTranslatef(0, 1.4, 0);
+      peon2->draw(vis, vbo, true);
    glPopMatrix();
 
     // COMPLETAR
@@ -89,7 +152,8 @@ void Escena::dibujar()
    if (obj & OBJ_CUB)
       cuadro->draw(vis, vbo);
    glPopMatrix();
-   
+   */
+   /*
    
    glPushMatrix();
    glTranslatef(0, -25, 0);

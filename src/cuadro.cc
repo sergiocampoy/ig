@@ -11,7 +11,8 @@ Cuadro::Cuadro() {
     f.emplace_back(0, 1, 3);
     f.emplace_back(1, 2, 3);
 
-    colorea();
+    //colorea({0.8, 0.8, 0.8});
+    colorea({1, 0, 0});
 
     // crea las coordenadas de textura
     c_t.emplace_back(0, 1);

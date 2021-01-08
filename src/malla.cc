@@ -1,6 +1,6 @@
 #include "aux.h"
 #include "malla.h"
-#include "menu.h"
+#include "misc.h"
 
 // *****************************************************************************
 //
@@ -15,7 +15,7 @@ void Malla3D::draw_ModoInmediato(unsigned int modo_vis)
    int t = (tam == -1) ? f.size() : tam;
    
    glEnableClientState(GL_VERTEX_ARRAY);
-   glEnableClientState(GL_COLOR_ARRAY);
+   // glEnableClientState(GL_COLOR_ARRAY);
    glVertexPointer(3, GL_FLOAT, 0, v.data());
 
    // modo puntos
@@ -90,7 +90,7 @@ void Malla3D::draw_ModoDiferido(unsigned int modo_vis)
    
    // inicializa array de vértices y color
    glEnableClientState(GL_VERTEX_ARRAY);
-   glEnableClientState(GL_COLOR_ARRAY);
+   // glEnableClientState(GL_COLOR_ARRAY);
 
    // enlaza array de vértices
    glBindBuffer(GL_ARRAY_BUFFER, id_vbo_ver);
@@ -175,6 +175,8 @@ void Malla3D::draw(unsigned int modo_vis, bool vbo)
       glEnableClientState (GL_TEXTURE_COORD_ARRAY);
       glTexCoordPointer (2, GL_FLOAT, 0, c_t.data());
       textura->activar();
+   } else {
+      glEnableClientState(GL_COLOR_ARRAY);
    }
 
    if (vbo) {
@@ -192,6 +194,7 @@ void Malla3D::draw(unsigned int modo_vis, bool vbo)
    }
 
    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+   glDisableClientState(GL_COLOR_ARRAY);
 }
 
 GLuint CrearVBO(GLuint tipo_vbo, GLuint size_bytes, GLvoid* puntero_ram)
@@ -311,16 +314,16 @@ void Malla3D::draw_ModoDiferido_Ajedrez()
    glDisableClientState(GL_COLOR_ARRAY);
 }
 
-void Malla3D::colorea()
+void Malla3D::colorea(const Tupla3f c)
 {
    // colores
-   Tupla3f c_solido(0.8f, 0.8f, 0.8f); // Gris
+   //Tupla3f c_solido(0.8f, 0.8f, 0.8f); // Gris
    Tupla3f c_linea (0.0f, 1.0f, 0.0f); // Verde
    Tupla3f c_puntos(1.0f, 0.0f, 0.0f); // Rojo
 
    // color sólido
    for (unsigned int i = 0; i < v.size(); i++)
-      c_s.push_back(c_solido);
+      c_s.push_back(c);
 
    // color línea
    for (unsigned int i = 0; i < v.size(); i++)

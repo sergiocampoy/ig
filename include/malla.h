@@ -42,11 +42,11 @@ class Malla3D
 
    void calculaTexturas();
 
+   void colorea(const Tupla3f c);
 
    protected:
 
    void calcular_normales() ; // calcula tabla de normales de vértices (práctica 3)
-   void colorea();
 
    /// Tamaño del vector de caras a dibujar (-1 usa f.size())
    int tam = -1;

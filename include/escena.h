@@ -9,10 +9,13 @@
 #include "objrevolucion.h"
 
 #include "flexo.h"
+#include "habitacion.h"
+#include "mesa.h"
+#include "monitor.h"
 
 #include "cuadro.h"
 
-#include "menu.h"
+#include "misc.h"
 
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, SELTAPAS, ANIMACION, AMANUAL} menu;
 class Escena
@@ -55,6 +58,12 @@ class Escena
    Cuadro* cuadro = nullptr;
 
    Flexo* flexo = nullptr;
+   Habitacion* habitacion = nullptr;
+   Mesa* mesa = nullptr;
+   Monitor* monitor = nullptr;
+   ObjRevolucion* lata = nullptr;
+   ObjRevolucion* peon1 = nullptr;
+   ObjRevolucion* peon2 = nullptr;
 
    // menú
    void help(menu modoMenu);
