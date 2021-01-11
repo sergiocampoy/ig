@@ -2,9 +2,7 @@
 
 Mesa::Mesa (int n) {
     cil = new Cilindro(n/2, n, 2, 1);
-    cil->colorea({0.25, 0.25, 0.25});
     cub = new Cubo();
-    cub->colorea({0.25, 0.25, 0.25});
 }
 
 void Mesa::draw (unsigned int modo_vis, bool vbo, bool tapas) {
@@ -41,4 +39,14 @@ void Mesa::draw (unsigned int modo_vis, bool vbo, bool tapas) {
         glScalef(1, 19, 1);
         cil->draw(modo_vis, vbo, tapas);
     glPopMatrix();
+}
+
+void Mesa::colorea (Tupla3f c) {
+    cil->colorea(c);
+    cub->colorea(c);
+}
+
+void Mesa::setMaterial (Material m) {
+    cil->setMaterial(m);
+    cub->setMaterial(m);
 }

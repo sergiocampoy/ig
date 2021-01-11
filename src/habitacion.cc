@@ -59,5 +59,27 @@ Habitacion::Habitacion () {
     c_t.emplace_back(0.25f, 1.00);
     c_t.emplace_back(0.50f, 1.00);
 
-    colorea({0.8, 0.8, 0.8});
+    //calcular_normales(); // nv
+
+    nv.emplace_back(1, -1, 1);
+    nv.emplace_back(-1, -1, 1);
+
+    nv.emplace_back(1, -1, 1);
+    nv.emplace_back(1, 1, 1);
+    nv.emplace_back(-1, 1, 1);
+    nv.emplace_back(-1, -1, 1);
+    nv.emplace_back(1, -1, 1);
+
+    nv.emplace_back(1, -1, -1);
+    nv.emplace_back(1, 1, -1);
+    nv.emplace_back(-1, 1, -1);
+    nv.emplace_back(-1, -1, -1);
+    nv.emplace_back(1, -1, -1);
+
+    nv.emplace_back(1, -1, -1);
+    nv.emplace_back(-1, -1, -1);
+
+    for (unsigned int i = 0; i < nv.size(); i++) {
+        nv[i] = nv[i].normalized();
+    }
 }

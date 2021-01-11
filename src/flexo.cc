@@ -2,9 +2,14 @@
 
 Cabeza::Cabeza (int n) {
     c = new Cilindro(n/2, n, 2, 1);
-    c->colorea({0, 0, 1});
     e = new Esfera(n, n, 1);
-    e->colorea({0, 0, 1});
+    l = new LuzPosicional (
+        {0, 0, 0},
+        GL_LIGHT2,
+        {1, 1, 1, 1},
+        {1, 1, 1, 1},
+        {0, 0, 0, 1}
+    );
 }
 
 void Cabeza::draw (unsigned int modo_vis, bool vbo, bool tapas) {
@@ -15,6 +20,10 @@ void Cabeza::draw (unsigned int modo_vis, bool vbo, bool tapas) {
 
     glPushMatrix();
         glTranslatef(4.5, 1.5, 0);
+        glPushMatrix();
+            glTranslatef(0, -1, 0);
+            l->aplicar();
+        glPopMatrix();
         glScalef(5, 1, 2.5);
         glPushMatrix();
             glScalef(1, 0.5, 1);
@@ -30,7 +39,6 @@ void Cabeza::draw (unsigned int modo_vis, bool vbo, bool tapas) {
 
 Brazo::Brazo (int n) {
     cil = new Cilindro (n/2, n, 2, 1);
-    cil->colorea({0.5, 0.5, 0.5});
     cab = new Cabeza (n);
 }
 
@@ -51,9 +59,7 @@ void Brazo::draw (unsigned int modo_vis, bool vbo, bool tapas, float alpha) {
 
 Cuerpo::Cuerpo (int n) {
     cil = new Cilindro (n/2, n, 2, 1);
-    cil->colorea({0, 0, 1});
     esf = new Esfera (n, n, 1);
-    esf->colorea({0, 0, 1});
     bra = new Brazo (n);
 }
 
@@ -79,7 +85,6 @@ void Cuerpo::draw (unsigned int modo_vis, bool vbo, bool tapas, float alpha, flo
 
 Flexo::Flexo (int n) {
     cil = new Cilindro (n/2, n, 2, 1);
-    cil->colorea({0, 0, 1});
     cue = new Cuerpo (n);
 
     /*
@@ -162,4 +167,46 @@ void Flexo::modificarVelocidadAltura (float n) {
     if (velocidadAltura > 2.5) { velocidadAltura = 2.5; }
     if (velocidadAltura < -2.5) { velocidadAltura = -2.5; }
     printf("Velocidad Altura = %f\n", velocidadAltura);
+}
+
+void Flexo::colorea (Tupla3f c) {
+    cil->colorea(c);
+    cue->colorea(c);
+}
+
+void Cuerpo::colorea (Tupla3f c) {
+    cil->colorea(c);
+    esf->colorea(c);
+    bra->colorea(c);
+}
+
+void Brazo::colorea (Tupla3f c) {
+    cil->colorea(c);
+    cab->colorea(c);
+}
+
+void Cabeza::colorea (Tupla3f c) {
+    this->c->colorea(c);
+    e->colorea(c);
+}
+
+void Flexo::setMateriales (Material a, Material b) {
+    cil->setMaterial(a);
+    cue->setMateriales(a, b);
+}
+
+void Cuerpo::setMateriales (Material a, Material b) {
+    cil->setMaterial(a);
+    esf->setMaterial(a);
+    bra->setMateriales(a, b);
+}
+
+void Brazo::setMateriales (Material a, Material b) {
+    cil->setMaterial(b);
+    cab->setMateriales(a, b);
+}
+
+void Cabeza::setMateriales (Material a, Material b) {
+    c->setMaterial(a);
+    e->setMaterial(a);
 }

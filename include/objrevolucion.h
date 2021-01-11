@@ -90,8 +90,8 @@ class Cilindro : public ObjRevolucion
 {
 public:
    Cilindro (
-      const int num_vert_perfil,
-      const int num_instancias_perf,
+      const unsigned int num_vert_perfil,
+      const unsigned int num_instancias_perf,
       const float altura,
       const float radio
    );
@@ -101,8 +101,8 @@ class Cono : public ObjRevolucion
 {
 public:
    Cono (
-      const int num_vert_perfil,
-      const int num_instancias_perf,
+      const unsigned int num_vert_perfil,
+      const unsigned int num_instancias_perf,
       const float altura,
       const float radio
    );
@@ -112,8 +112,8 @@ class Esfera : public ObjRevolucion
 {
 public:
    Esfera (
-      const int num_vert_perfil,
-      const int num_instancias_perfil,
+      const unsigned int num_vert_perfil,
+      const unsigned int num_instancias_perfil,
       const float radio
    );
 };

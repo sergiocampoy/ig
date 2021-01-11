@@ -30,5 +30,7 @@ Cubo::Cubo(float lado, Tupla3f pos)
    f.push_back(Tupla3i(1, 4, 5));
    f.push_back(Tupla3i(2, 6, 4));
    f.push_back(Tupla3i(0, 2, 4));
+
+   calcular_normales();
 }
 

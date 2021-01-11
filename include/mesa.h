@@ -12,6 +12,8 @@ private:
 public:
     Mesa (int n);
     void draw (unsigned int modo_vis, bool vbo, bool tapas);
+    void colorea (Tupla3f c);
+    void setMaterial (Material m);
 };
 
 #endif

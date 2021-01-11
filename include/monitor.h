@@ -13,6 +13,11 @@ private:
 public:
     Monitor (const std::string& fichero);
     void draw (unsigned int modo_vis, bool vbo);
+    
+    void colorea (Tupla3f c);
+    void setMaterial (Material a);
+
+    Tupla4f emision;
 };
 
 #endif

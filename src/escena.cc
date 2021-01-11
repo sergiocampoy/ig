@@ -11,43 +11,121 @@
 
 Escena::Escena()
 {
-    Front_plane       = 40.0;
-    Back_plane        = 2000.0;
-    Observer_distance = 4*Front_plane;
-    Observer_angle_x  = 0.0 ;
-    Observer_angle_y  = 0.0 ;
+   Front_plane       = 40.0;
+   Back_plane        = 2000.0;
+   Observer_distance = 4*Front_plane;
+   Observer_angle_x  = 0.0 ;
+   Observer_angle_y  = 0.0 ;
 
-    ejes.changeAxisSize( 4000 );
+   ejes.changeAxisSize (4000);
 
-   cubo = new Cubo(40, Tupla3f(0, 0, 0));
-   tetraedro = new Tetraedro(40);
-   ply = new ObjPLY("./plys/ori.ply");
 
-   rev = new ObjRevolucion("./plys/peon.ply", 16, 1, true, true);
-   cono = new Cono(4, 16, 1, 1);
-   cilindro = new Cilindro(4, 16, 1, 1);
-   esfera = new Esfera(16, 16, 1);
-
-   cuadro = new Cuadro();
-   cuadro->setTextura("minihabitacion");
-
-   cilindro->setTextura("lata1");
-
-   flexo = new Flexo(16);
+   // OBJETOS ESCENA
+   cubo       = new Cubo();
+   tetraedro  = new Tetraedro(1);
+   cono       = new Cono(4, 16, 1, 1);
+   esfera     = new Esfera(16, 16, 1);
+   flexo      = new Flexo(16);
    habitacion = new Habitacion();
-   habitacion->setTextura("minihabitacion");
+   mesa       = new Mesa(16);
+   monitor    = new Monitor("rick");
+   lata       = new Cilindro(4, 16, 3, 1);
+   peon1      = new ObjRevolucion("./plys/peon.ply", 16, 1, true, true);
+   peon2      = new ObjRevolucion("./plys/peon.ply", 16, 1, true, true);
 
-   mesa = new Mesa (16);
-   monitor = new Monitor("rick");
 
-   lata = new Cilindro(4, 16, 3, 1);
-   lata->colorea({1, 1, 1});
-   lata->setTextura("lata1");
+   // COLORES
+   cubo      -> colorea ({0.8, 0.8, 0.8});
+   tetraedro -> colorea ({0.5, 0.5, 0.5});
+   cono      -> colorea ({0.2, 0.2, 0.2});
+   esfera    -> colorea ({1.0, 0.0, 1.0});
+   flexo     -> colorea ({0.0, 0.0, 1.0});
+   habitacion-> colorea ({1.0, 1.0, 1.0});
+   mesa      -> colorea ({0.0, 0.2, 0.0});
+   monitor   -> colorea ({0.0, 0.0, 0.0});
+   lata      -> colorea ({1.0, 0.0, 0.0});
+   peon1     -> colorea ({1.0, 1.0, 0.0});
+   peon2     -> colorea ({0.0, 1.0, 1.0});
 
-   peon1 = new ObjRevolucion("./plys/peon.ply", 16, 1, true, true);
-   peon1->colorea({1, 1, 0});
-   peon2 = new ObjRevolucion("./plys/peon.ply", 16, 1, true, true);
-   peon2->colorea({0, 1, 1});
+
+   // MATERIALES
+   Material azul_flexo (
+      {0, 0, 1, 1},
+      {1, 1, 1, 1},
+      {0, 0, 0.25, 1},
+      128
+   );
+   Material gris_flexo (
+      {0.8, 0.8, 0.8, 1},
+      {1, 1, 1, 1},
+      {0.2, 0.2, 0.2, 1},
+      128
+   );
+   Material gris_habitacion (
+      {0.5, 0.5, 0.5, 1},
+      {0, 0, 0, 1},
+      {0.25, 0.25, 0.25, 1},
+      128
+   );
+   Material verde_mesa (
+      {0, 0.25, 0, 1},
+      {1, 1, 1, 1},
+      {0, 0.0625, 0, 1},
+      128
+   );
+   Material blanco_lata (
+      {1, 1, 1, 1},
+      {1, 1, 1, 1},
+      {0.25, 0.25, 0.25, 1},
+      128
+   );
+   Material blanco_peon (
+      {1, 1, 1, 1},
+      {0, 0, 0, 1},
+      {0.25, 0.25, 0.25, 1},
+      128
+   );
+   Material negro_peon (
+      {0, 0, 0, 1},
+      {1, 1, 1, 1},
+      {0, 0, 0, 1},
+      64
+   );
+   
+   cubo      -> setMaterial (azul_flexo);
+   tetraedro -> setMaterial (gris_habitacion);
+   cono      -> setMaterial (blanco_peon);
+   esfera    -> setMaterial (verde_mesa);
+   flexo     -> setMateriales (azul_flexo, gris_flexo);
+   habitacion-> setMaterial (gris_habitacion);
+   mesa      -> setMaterial (verde_mesa);
+   monitor   -> setMaterial (negro_peon);
+   lata      -> setMaterial (blanco_lata);
+   peon1     -> setMaterial (blanco_peon);
+   peon2     -> setMaterial (negro_peon);
+
+   
+   // TEXTURAS
+   habitacion->setTextura("hab");
+   lata      ->setTextura("lata1");
+
+
+   // LUCES
+   lp = new LuzPosicional (
+      {0, 0, 0},
+      GL_LIGHT0,
+      {1, 1, 1, 1},
+      {1, 1, 1, 1},
+      {0, 0, 0, 1}
+   );
+   ld = new LuzDireccional (
+      {-90, 45},
+      GL_LIGHT0,
+      {1, 1, 1, 1},
+      {1, 1, 1, 1},
+      {0, 0, 0, 1}
+   );
+   ambiente = new Ambience (GL_LIGHT1);
 }
 
 //**************************************************************************
@@ -63,12 +141,20 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
    glEnable(GL_CULL_FACE);
+   glEnable(GL_NORMALIZE); // No modifica las normales
+
+   glShadeModel(GL_SMOOTH);
+
+   // TODO: Luces temporal
+   glEnable(GL_LIGHT0);
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
 
    change_projection( float(UI_window_width)/float(UI_window_height) );
 	glViewport( 0, 0, UI_window_width, UI_window_height );
+
+   help(modoMenu);
 }
 
 
@@ -86,59 +172,121 @@ void Escena::dibujar()
 	change_observer();
    ejes.draw();
 
+   /// TODO: Material WIP
+
+   /// TODO: Luces WIP
+
+   ld->aplicar();
+   //ld->variarAnguloAlpha(1);
+   ambiente->aplicar();
+   /*
+   glLightfv(GL_LIGHT0, GL_DIFFUSE,  difuso);
+   glLightfv(GL_LIGHT0, GL_SPECULAR, especular);
+   glLightfv(GL_LIGHT0, GL_AMBIENT,  ambiente);
+   glLightfv(GL_LIGHT0, GL_POSITION, posicion);
+   */
+
    glPushMatrix();
-      glScalef(500, 500, 500);
-      glRotatef(-90, 0, 1, 0);
-      glTranslatef(-0.5, -0.5, -0.5);
-      habitacion->draw(vis, vbo);
+      glTranslatef(85, -90, -15);
+      glScalef(10, 10, 10);
+      if (obj & OBJ_CUB)
+         cubo->draw(vis, vbo);
    glPopMatrix();
 
    glPushMatrix();
-      glTranslatef(0, -90, -170);
-      glScalef(4, 4, 4);
-      mesa->draw (vis, vbo, true);
+      glTranslatef(-120, -90 - 10*sin(-M_PI/6), -10);
+      glScalef(10, 10, 10);
+      if (obj & OBJ_TET)
+         tetraedro->draw(vis, vbo);
    glPopMatrix();
-   
+
    glPushMatrix();
-      glTranslatef(120, -90, -200);
-      glScalef(5, 5, 5);
-      glRotatef(-135, 0, 1, 0);
-      flexo->draw(vis, vbo, true);
+      glTranslatef(-120, -90, 15);
+      glScalef(10, 30, 10);
+      if (obj & OBJ_CON)
+         cono->draw(vis, vbo, obj & OBJ_TAP);
    glPopMatrix();
-   
+
+   glPushMatrix();
+      glTranslatef(0, -220, 0);
+      glScalef(30, 30, 30);
+      if (obj & OBJ_ESF)
+         esfera->draw(vis, vbo, obj & OBJ_TAP);
+   glPopMatrix();
+
    glPushMatrix();
       //glTranslatef(120, -90, -200);
+      glTranslatef(-50, -50, 0);
+      glScalef(10, 10, 10);
+      //glRotatef(-90, 0, 1, 0);
+      //flexo->draw(vis, vbo, true);
+   glPopMatrix();
+   
+   glPushMatrix();
+      glScalef(500, 500, 500);
+      glRotatef(90, 0, 1, 0);
+      glTranslatef(-0.5, -0.5, -0.5);
+      if (obj & OBJ_HAB)
+         habitacion->draw(vis, vbo);
+   glPopMatrix();
+   
+   glPushMatrix();
+      glTranslatef(0, -90, 0);
+      glScalef(4, 4, 4);
+      if (obj & OBJ_MES)
+         mesa->draw (vis, vbo, obj & OBJ_TAP);
+   glPopMatrix();
+   
+   glPushMatrix();
+      glTranslatef(120, -90, -30);
       glScalef(5, 5, 5);
       glRotatef(-135, 0, 1, 0);
-      flexo->draw(vis, vbo, true);
+      if (obj & OBJ_FLE)
+         flexo->draw(vis, vbo, obj & OBJ_TAP);
    glPopMatrix();
-
+   
    glPushMatrix();
-      glTranslatef(0, -90, -200);
+      glTranslatef(0, -90, -30);
       glScalef(40, 40, 40);
-      monitor->draw(vis, vbo);
+      if (obj & OBJ_MON)
+         monitor->draw(vis, vbo);
    glPopMatrix();
 
    glPushMatrix();
-      glTranslatef(-120, -90, -210);
+      glTranslatef(-120, -90, -40);
       glScalef(10, 10, 10);
       glTranslatef(0, 1.5, 0);
-      lata->draw(vis, vbo, true);
+      glRotatef(90, 0, 1, 0);
+      if (obj & OBJ_LAT)
+         lata->draw(vis, vbo, obj & OBJ_TAP);
    glPopMatrix();
    
    glPushMatrix();
-      glTranslatef(-25, -90, -140);
+      glTranslatef(-25, -90, 30);
       glScalef(20, 20, 20);
       glTranslatef(0, 1.4, 0);
-      peon1->draw(vis, vbo, true);
+      glRotatef(-90, 0, 1, 0);
+      if (obj & OBJ_PE1)
+         peon1->draw(vis, vbo, obj & OBJ_TAP);
    glPopMatrix();
    
    glPushMatrix();
-      glTranslatef(25, -90, -140);
+      glTranslatef(25, -90, 30);
       glScalef(20, 20, 20);
       glTranslatef(0, 1.4, 0);
-      peon2->draw(vis, vbo, true);
+      if (obj & OBJ_PE2)
+         peon2->draw(vis, vbo, obj & OBJ_TAP);
    glPopMatrix();
+
+
+
+
+
+
+
+
+
+
 
     // COMPLETAR
     //   Dibujar los diferentes elementos de la escena
@@ -236,6 +384,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             // Activa/desactiva modo ajedrez
             vis ^= VIS_AJE;
             if (vis & VIS_AJE) {
+               glDisable(GL_LIGHTING);
                cout << "Modo ajedrez " << FGRN("activado") << endl;
             } else {
                cout << "Modo ajedrez " << FRED("desactivado") << endl;
@@ -268,9 +417,20 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                animacion_automatica = true;
                cout << "Animación automática " << FGRN("activada") << endl;
             }
+         } else if (modoMenu == LUCES) {
+            modificarAlpha = true;
+            modificarGamer = false;
+            cout << "Se va a modificar " << FBLU("alfa") << endl;
          } else {
             cout << FRED("Opción inválida") << endl;
             help(modoMenu);
+         }
+      break;
+      case 'B':
+         if (modoMenu == LUCES) {
+            modificarAlpha = false;
+            modificarGamer = false;
+            cout << "Se va a modificar " << FBLU("beta") << endl;
          }
       break;
       case 'C':
@@ -292,6 +452,59 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          modoMenu = SELDIBUJADO;
          help(modoMenu);
       break;
+      case 'E':
+         if (modoMenu == SELOBJETO) {
+            // Activa/desactiva esfera
+            obj ^= OBJ_ESF;
+            if (obj != OBJ_ESF) {
+               cout << "Esfera " << FGRN("activada") << endl;
+            } else {
+               cout << "Esfera " << FRED("desactivada") << endl;
+            }
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
+      break;
+      case 'F':
+         if (modoMenu == SELOBJETO) {
+            // Activa/desactiva flexo
+            obj ^= OBJ_FLE;
+            if (obj != OBJ_FLE) {
+               cout << "Flexo " << FGRN("activado") << endl;
+            } else {
+               cout << "Flexo " << FRED("desactivado") << endl;
+            }
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
+         }
+      break;
+      case 'G':
+         if (modoMenu == LUCES) {
+            if (modificarGamer) {
+               modificarGamer = false;
+               cout << "Modo "
+                    << FRED("G")
+                    << FYEL("A")
+                    << FGRN("M")
+                    << FCYN("E")
+                    << FBLU("R")
+                    << FRED(" desactivado")
+                    << endl;
+            } else {
+               modificarGamer = true;
+               cout << "Modo "
+                    << FRED("G")
+                    << FYEL("A")
+                    << FGRN("M")
+                    << FCYN("E")
+                    << FBLU("R")
+                    << FGRN(" activado")
+                    << endl;
+            }
+         } 
+      break;
       case 'H':
          // Ayuda
          help(modoMenu);
@@ -305,19 +518,29 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             // Activa/desactiva modo líneas
             vis ^= VIS_LIN;
             if (vis & VIS_LIN) {
+               glDisable(GL_LIGHTING);
                cout << "Modo lineas " << FGRN("activado") << endl;
             } else {
                cout << "Modo lineas " << FRED("desactivado") << endl;
             }
-         } else if (modoMenu == NADA) {
-            light_mode = !light_mode;
-            if (light_mode)
-            {
-               glClearColor( 1.0, 1.0, 1.0, 1.0 );
-               cout << "Modo oscuro " << FRED("desactivado") << endl;
+         } else if (modoMenu == NADA || modoMenu == LUCES) {
+            modoMenu = LUCES;
+            vis &= 0b10100; // Sólido y texturas
+            if (glIsEnabled(GL_LIGHTING)) {
+               glDisable(GL_LIGHTING);
+               cout << "Iluminación " << FRED("desactivada") << endl;
             } else {
-               glClearColor( 40.0/255, 42.0/255, 54.0/255, 1.0); // #DarkModeEverything
-               cout << "Modo oscuro " << FGRN("activado") << endl;
+               glEnable(GL_LIGHTING);
+               cout << "Iluminación " << FGRN("activada") << endl;
+            }
+            help(modoMenu);
+         } else if (modoMenu == SELOBJETO) {
+            // Activa/desactiva lata
+            obj ^= OBJ_LAT;
+            if (obj != OBJ_LAT) {
+               cout << "Lata " << FGRN("activada") << endl;
+            } else {
+               cout << "Lata " << FRED("desactivada") << endl;
             }
          } else {
             cout << FRED("Opción inválida") << endl;
@@ -325,11 +548,14 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          }
       break;
       case 'N':
-         if (modoMenu == SELTAPAS) {
-            // Desactiva las tapas del objeto de revolución
-            obj &= ~OBJ_TAP;
-            cout << "Tapas " << FRED("desactivadas") << endl;
-            modoMenu = SELOBJETO;
+         if (modoMenu == SELOBJETO) {
+            // Activa/desactiva cono
+            obj ^= OBJ_CON;
+            if (obj != OBJ_CON) {
+               cout << "Cono " << FGRN("activado") << endl;
+            } else {
+               cout << "Cono " << FRED("desactivado") << endl;
+            }
          } else {
             cout << FRED("Opción inválida") << endl;
             help(modoMenu);
@@ -341,6 +567,14 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             modoMenu = AMANUAL;
             animacion_automatica = false;
             help(modoMenu);
+         } else if (modoMenu == SELOBJETO) {
+            // Activa/desactiva mesa
+            obj ^= OBJ_MES;
+            if (obj != OBJ_MES) {
+               cout << "Mesa " << FGRN("activada") << endl;
+            } else {
+               cout << "Mesa " << FRED("desactivada") << endl;
+            }
          } else {
             cout << FRED("Opción inválida") << endl;
             help(modoMenu);
@@ -353,20 +587,21 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       break;
       case 'P':
          if (modoMenu == SELVISUALIZACION) {
-            // Activa/desactiva modo ajedrez
+            // Activa/desactiva modo puntos
             vis ^= VIS_PUN;
             if (vis & VIS_PUN) {
+               glDisable(GL_LIGHTING);
                cout << "Modo puntos " << FGRN("activado") << endl;
             } else {
                cout << "Modo puntos " << FRED("desactivado") << endl;
             }
          } else if (modoMenu == SELOBJETO) {
-            // Activa/desactiva PLY
-            obj ^= OBJ_PLY;
-            if (obj & OBJ_PLY) {
-               cout << "Objeto PLY " << FGRN("activado") << endl;
+            // Activa/desactiva tapas
+            obj ^= OBJ_TAP;
+            if (obj != OBJ_TAP) {
+               cout << "Tapas " << FGRN("activadas") << endl;
             } else {
-               cout << "Objeto PLY " << FRED("desactivado") << endl;
+               cout << "Tapas " << FRED("desactivadas") << endl;
             }
          } else {
             cout << FRED("Opción inválida") << endl;
@@ -385,15 +620,12 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       break;
       case 'R':
          if (modoMenu == SELOBJETO) {
-            // Activa/desactiva objeto de revolución
-            obj ^= OBJ_REV;
-            if (obj & OBJ_REV) {
-               cout << "Objeto de revolución " << FGRN("activado") << endl;
-               cout << "Quieres tapas? ("
-                    << FGRN("y") << "/" << FRED("n") << ")" << endl;
-               modoMenu = SELTAPAS;
+            // Activa/desactiva habitación
+            obj ^= OBJ_HAB;
+            if (obj != OBJ_HAB) {
+               cout << "Habitación " << FGRN("activado") << endl;
             } else {
-               cout << "Objeto de revolución " << FRED("desactivado") << endl;
+               cout << "Habitación " << FRED("desactivado") << endl;
             }
          } else {
             cout << FRED("Opción inválida") << endl;
@@ -408,6 +640,14 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                cout << "Modo sólido " << FGRN("activado") << endl;
             } else {
                cout << "Modo sólido " << FRED("desactivado") << endl;
+            }
+         } else if (modoMenu == SELOBJETO) {
+            // Activa/desactiva monitor
+            obj ^= OBJ_MON;
+            if (obj != OBJ_MON) {
+               cout << "Monitor " << FGRN("activado") << endl;
+            } else {
+               cout << "Monitor " << FRED("desactivado") << endl;
             }
          } else {
             cout << FRED("Opción inválida") << endl;
@@ -441,17 +681,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          modoMenu = SELVISUALIZACION;
          help(modoMenu);
       break;
-      case 'Y':
-         if (modoMenu == SELTAPAS) {
-            // Activa/desactiva tapas del objeto de revolución
-            obj |= OBJ_TAP;
-            cout << "Tapas " << FGRN("activadas") << endl;
-            modoMenu = SELOBJETO;
-         } else {
-            cout << FRED("Opción inválida") << endl;
-            help(modoMenu);
-         }
-      break;
       case '0':
          if (modoMenu == AMANUAL || modoMenu == ANIMACION) {
             grd_libertad = 0b111; // Selecciona todos los grados de libertad
@@ -468,6 +697,22 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             cout << endl;
          } else if (modoMenu == AMANUAL || modoMenu == ANIMACION) {
             grd_libertad = 0b1; // Cabeza
+         } else if (modoMenu == LUCES) {
+            if (glIsEnabled(GL_LIGHT0)) {
+               glDisable(GL_LIGHT0);
+               cout << "Luz direccional " << FRED("desactivada") << endl;
+            } else {
+               glEnable(GL_LIGHT0);
+               cout << "Luz direccional " << FGRN("activada") << endl;
+            }
+         } else if (modoMenu == SELOBJETO) {
+            // Activa/desactiva peon1
+            obj ^= OBJ_PE1;
+            if (obj != OBJ_PE1) {
+               cout << "Peon1 " << FGRN("activado") << endl;
+            } else {
+               cout << "Peon1 " << FRED("desactivado") << endl;
+            }
          } else {
             cout << FRED("Opción inválida") << endl;
             help(modoMenu);
@@ -481,6 +726,22 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             cout << endl;
          } else if (modoMenu == AMANUAL || modoMenu == ANIMACION) {
             grd_libertad = 0b10; // Brazo
+         } else if (modoMenu == LUCES) {
+            if (glIsEnabled(GL_LIGHT1)) {
+               glDisable(GL_LIGHT1);
+               cout << "Luz ambiente " << FRED("desactivada") << endl;
+            } else {
+               glEnable(GL_LIGHT1);
+               cout << "Luz ambiente " << FGRN("activada") << endl;
+            }
+         } else if (modoMenu == SELOBJETO) {
+            // Activa/desactiva peon2
+            obj ^= OBJ_PE2;
+            if (obj != OBJ_PE2) {
+               cout << "Peon2 " << FGRN("activado") << endl;
+            } else {
+               cout << "Peon2 " << FRED("desactivado") << endl;
+            }
          } else {
             cout << FRED("Opción inválida") << endl;
             help(modoMenu);
@@ -489,6 +750,17 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       case '3':
          if (modoMenu == AMANUAL || modoMenu == ANIMACION) {
             grd_libertad = 0b100; // Altura
+         } else if (modoMenu == LUCES) {
+            if (glIsEnabled(GL_LIGHT2)) {
+               glDisable(GL_LIGHT2);
+               cout << "Luz del flexo " << FRED("desactivada") << endl;
+            } else {
+               glEnable(GL_LIGHT2);
+               cout << "Luz del flexo " << FGRN("activada") << endl;
+            }
+         } else {
+            cout << FRED("Opción inválida") << endl;
+            help(modoMenu);
          }
       break;
       case '+':
@@ -512,6 +784,17 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             if (grd_libertad & 0b100) {
                flexo->modificaAltura(8.0/20);
             }
+         } else if (modoMenu == LUCES) {
+            if (modificarGamer) {
+               ambiente->aumentarVelocidad();
+            } else {
+               if (modificarAlpha) {
+                  ld->variarAnguloAlpha(5);
+               } else {
+                  ld->variarAnguloBeta(5);
+               }
+               ld->printDireccion();
+            }
          }
       break;
       case '-':
@@ -534,6 +817,17 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             }
             if (grd_libertad & 0b100) {
                flexo->modificaAltura(-8.0/20);
+            }
+         } else if (modoMenu == LUCES) {
+            if (modificarGamer) {
+               ambiente->disminuirVelocidad();
+            } else {
+               if (modificarAlpha) {
+                  ld->variarAnguloAlpha(-5);
+               } else {
+                  ld->variarAnguloBeta(-5);
+               }
+               ld->printDireccion();
             }
          }
       break;
@@ -623,44 +917,55 @@ void Escena::help(menu modoMenu)
       case NADA:
          printf(
             BOLD(FBLU("Menú principal:\n"))
-            ". - Muestra este menú\n"
+            "H - Muestra este menú\n"
             "I - Información de la escena\n"
-            "L - Activar/Desactivar modo oscuro\n"
             "Q - Salir\n"
+            "L - Menú de iluminación\n"
             "O - Selección de objeto\n"
             "V - Selección de modo de visualización\n"
             "D - Selección de modo de dibujado\n"
+            "A - Menú de animación automática\n"
+            "M - Menú de animación manual\n"
          );
       break;
       case SELOBJETO:
          printf(
             BOLD(FBLU("Selección de objeto\n"))
-            ". - Muestra este menú\n"
+            "H - Muestra este menú\n"
             "I - Información de la escena\n"
             "Q - Volver al menú principal\n"
             "A - Activar/desactivar todos los objetos\n"
+            "P - Activar/desactivar tapas\n"
             "C - Activar/desactivar cubo\n"
             "T - Activar/desactivar tetraedro\n"
-            "P - Activar/desactivar objeto ply\n"
-            "R - Activar/desactivar objeto revolución\n"
+            "N - Activar/desactivar cono\n"
+            "E - Activar/desactivar esfera\n"
+            "F - Activar/desactivar flexo\n"
+            "R - Activar/desactivar habitación\n"
+            "M - Activar/desactivar mesa\n"
+            "S - Activar/desactivar monitor\n"
+            "L - Activar/desactivar lata\n"
+            "1 - Activar/desactivar peon1\n"
+            "2 - Activar/desactivar peon2\n"
          );
       break;
       case SELVISUALIZACION:
          printf(
             BOLD(FBLU("Selección de modo de visualización\n"))
-            ". - Muestra este menú\n"
+            "H - Muestra este menú\n"
             "I - Información de la escena\n"
             "Q - Volver al menú principal\n"
             "P - Activar/desactivar modo puntos\n"
             "L - Activar/desactivar modo línea\n"
             "S - Activar/desactivar modo sólido (default)\n"
             "A - Activar/desactivar modo ajedrez\n"
+            "T - Activar/desactivar texturas\n"
          );
       break;
       case SELDIBUJADO:
          printf(
             BOLD(FBLU("Selección de modo de dibujado\n"))
-            ". - Muestra este menú\n"
+            "H - Muestra este menú\n"
             "I - Información de la escena\n"
             "Q - Volver al menú principal\n"
             "1 - Visualizar mediante glDrawElements\n"
@@ -670,7 +975,7 @@ void Escena::help(menu modoMenu)
       case ANIMACION:
          printf(
             BOLD(FBLU("Opciones de animación automática\n"))
-            ". - Muestra este menú\n"
+            "H - Muestra este menú\n"
             "Q - Volver al menú principal\n"
             "A - Activar/Desactivar animación automática\n"
             "0 - Modificar todos los grados de libertad\n"
@@ -684,7 +989,7 @@ void Escena::help(menu modoMenu)
       case AMANUAL:
          printf(
             BOLD(FBLU("Opciones de animación manual\n"))
-            ". - Muestra este menú\n"
+            "H - Muestra este menú\n"
             "Q - Volver al menú principal\n"
             "0 - Modificar todos los grados de libertad\n"
             "1 - Modificar la cabeza\n"
@@ -692,6 +997,22 @@ void Escena::help(menu modoMenu)
             "3 - Modificar el tronco\n"
             "+ - Aumentar el valor\n"
             "- - Disminuir el valor\n"
+         );
+      break;
+      case LUCES:
+         printf(
+            BOLD(FBLU("Opciones iluminación\n"))
+            "H - Muestra este menú\n"
+            "Q - Volver al menú principal\n"
+            "L - Activar/Desactivar iluminación\n"
+            "1 - Activar/Desactivar luz direccional de la ventana\n"
+            "2 - Activar/Desactivar luz ambiente\n"
+            "3 - Activar/Desactivar luz del flexo\n"
+            "A - Modificar el valor alfa de la luz direccional\n"
+            "B - Modificar el valor beta de la luz direccional\n"
+            "G - Modo Gamer\n"
+            "+ - Aumentar el valor o velocidad\n"
+            "- - Disminuir el valor o velocidad\n"
          );
       break;
    }
@@ -714,15 +1035,45 @@ void Escena::info(unsigned int obj, unsigned int vis, bool vbo)
      << ((obj & OBJ_TET) ? FGRN("si") : FRED("no"))
      << endl
 
-     << "\tObjeto PLY:     "
-     << ((obj & OBJ_PLY) ? FGRN("si") : FRED("no"))
+     << "\tCono:           "
+     << ((obj & OBJ_CON) ? FGRN("si") : FRED("no"))
      << endl
 
-     << "\tObjeto de rev:  "
-     << ((obj & OBJ_REV) ? FGRN("si") : FRED("no"))
-     << " (tapas: "
+     << "\tEsfera:         "
+     << ((obj & OBJ_ESF) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tFlexo:          "
+     << ((obj & OBJ_FLE) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tHabitacion:     "
+     << ((obj & OBJ_HAB) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tMesa:           "
+     << ((obj & OBJ_MES) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tMonitor:        "
+     << ((obj & OBJ_MON) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tLata:           "
+     << ((obj & OBJ_LAT) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tPeon1:          "
+     << ((obj & OBJ_PE1) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tPeon2:          "
+     << ((obj & OBJ_PE2) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tTapas:          "
      << ((obj & OBJ_TAP) ? FGRN("si") : FRED("no"))
-     << ")" << endl
+     << endl
 
 
      << endl << FBLU("Modo de visualización") << endl
@@ -743,6 +1094,10 @@ void Escena::info(unsigned int obj, unsigned int vis, bool vbo)
      << ((vis & VIS_AJE) ? FGRN("si") : FRED("no"))
      << endl
 
+     << "\tTexturas:       "
+     << ((vis & VIS_TEX) ? FGRN("si") : FRED("no"))
+     << endl
+
 
      << endl << FBLU("Modo de dibujado") << endl
 
@@ -754,6 +1109,25 @@ void Escena::info(unsigned int obj, unsigned int vis, bool vbo)
      << (vbo ? FGRN("si") : FRED("no"))
      << endl
 
+
+     << endl << FBLU("Iluminación") << endl
+
+     << "\tGL_LIGHTING:    "
+     << (glIsEnabled(GL_LIGHTING) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tDireccional:    "
+     << (glIsEnabled(GL_LIGHT0) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tAmbiente:       "
+     << (glIsEnabled(GL_LIGHT1) ? FGRN("si") : FRED("no"))
+     << endl
+
+     << "\tFlexo:          "
+     << (glIsEnabled(GL_LIGHT2) ? FGRN("si") : FRED("no"))
+     << endl
+
      << endl;
 }
 
@@ -763,3 +1137,8 @@ void Escena::animarModeloJerarquico() {
       flexo->animarModeloJerarquico();
 }
     
+void Escena::animarLuz () {
+   if (modificarGamer) {
+      ambiente->animar();
+   }
+}

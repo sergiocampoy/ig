@@ -2,6 +2,21 @@
 #define _MENU_H
 
 // selección de objeto
+#define OBJ_ALL 0b111111111111
+
+#define OBJ_CUB 0b1
+#define OBJ_TET 0b10
+#define OBJ_CON 0b100
+#define OBJ_ESF 0b1000
+#define OBJ_FLE 0b10000
+#define OBJ_HAB 0b100000
+#define OBJ_MES 0b1000000
+#define OBJ_MON 0b10000000
+#define OBJ_LAT 0b100000000
+#define OBJ_PE1 0b1000000000
+#define OBJ_PE2 0b10000000000
+#define OBJ_TAP 0b100000000000
+/*
 #define OBJ_ALL 0b11111
 
 #define OBJ_CUB 0b1
@@ -9,6 +24,7 @@
 #define OBJ_PLY 0b100
 #define OBJ_REV 0b1000
 #define OBJ_TAP 0b10000
+*/
 
 
 // selección de modo de visualización

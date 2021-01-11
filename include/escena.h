@@ -13,11 +13,14 @@
 #include "mesa.h"
 #include "monitor.h"
 
+#include "luz.h"
+#include "ambience.h"
+
 #include "cuadro.h"
 
 #include "misc.h"
 
-typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, SELTAPAS, ANIMACION, AMANUAL} menu;
+typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, ANIMACION, AMANUAL, LUCES} menu;
 class Escena
 {
 
@@ -65,6 +68,13 @@ class Escena
    ObjRevolucion* peon1 = nullptr;
    ObjRevolucion* peon2 = nullptr;
 
+   Luz* lp = nullptr;
+   LuzDireccional* ld = nullptr;
+   // LuzPosicional* ambiente = nullptr;
+   Ambience* ambiente = nullptr;
+   bool modificarAlpha = true;
+   bool modificarGamer = false;
+
    // menú
    void help(menu modoMenu);
    void info(unsigned int obj, unsigned int vis, bool vbo);
@@ -89,7 +99,7 @@ class Escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;
 	void teclaEspecial( int Tecla1, int x, int y );
     void animarModeloJerarquico();
-    
+    void animarLuz();
 
 };
 #endif

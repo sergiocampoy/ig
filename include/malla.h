@@ -12,6 +12,7 @@
 
 #include "aux.h"
 #include "textura.h"
+#include "material.h"
 
 // *****************************************************************************
 //
@@ -44,9 +45,9 @@ class Malla3D
 
    void colorea(const Tupla3f c);
 
-   protected:
+   void setMaterial (const Material& m);
 
-   void calcular_normales() ; // calcula tabla de normales de vértices (práctica 3)
+   protected:
 
    /// Tamaño del vector de caras a dibujar (-1 usa f.size())
    int tam = -1;
@@ -72,12 +73,23 @@ class Malla3D
    GLuint id_vbo_col_pun = 0, id_vbo_col_lin = 0, id_vbo_col_sol = 0;
    GLuint id_vbo_tri_par = 0, id_vbo_tri_imp = 0;
 
+   GLuint id_vbo_nor = 0;
+
    // P5
 
    /// Tabla de coordenadas de textura
    std::vector<Tupla2f>c_t;
    /// Objeto de textura
    Textura* textura = nullptr;
+
+   // P3
+
+   // Calcula nv
+   std::vector<Tupla3f> nc;
+   std::vector<Tupla3f> nv;
+   void calcular_normales ();
+
+   Material m;
 
 } ;
 

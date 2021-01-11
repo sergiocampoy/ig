@@ -3,14 +3,19 @@
 
 #include "aux.h"
 #include "objrevolucion.h"
+#include "luz.h"
 
 class Cabeza {
 private:
     Cilindro* c = nullptr;
     Esfera*   e = nullptr;
+    LuzPosicional* l = nullptr;
 public:
     Cabeza (int ns);
     void draw (unsigned int modo_vis, bool vbo, bool tapas);
+
+    void colorea (Tupla3f c);
+    void setMateriales (Material a, Material b);
 };
 
 class Brazo {
@@ -20,6 +25,9 @@ private:
 public:
     Brazo (int n);
     void draw (unsigned int modo_vis, bool vbo, bool tapas, float alpha);
+
+    void colorea (Tupla3f c);
+    void setMateriales (Material a, Material b);
 };
 
 class Cuerpo {
@@ -30,6 +38,9 @@ private:
 public:
     Cuerpo (int n);
     void draw (unsigned int modo_vis, bool vbo, bool tapas, float alpha, float beta, float gamma);
+
+    void colorea (Tupla3f c);
+    void setMateriales (Material a, Material b);
 };
 
 class Flexo {
@@ -64,6 +75,8 @@ public:
     void modificarVelocidadBrazo (float n);
     void modificarVelocidadAltura (float n);
     
+    void colorea (Tupla3f c);
+    void setMateriales (Material a, Material b);
 };
 
 #endif
