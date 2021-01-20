@@ -170,6 +170,7 @@ void Flexo::modificarVelocidadAltura (float n) {
 }
 
 void Flexo::colorea (Tupla3f c) {
+    color = c;
     cil->colorea(c);
     cue->colorea(c);
 }

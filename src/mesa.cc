@@ -42,6 +42,7 @@ void Mesa::draw (unsigned int modo_vis, bool vbo, bool tapas) {
 }
 
 void Mesa::colorea (Tupla3f c) {
+    color = c;
     cil->colorea(c);
     cub->colorea(c);
 }

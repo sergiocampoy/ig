@@ -157,6 +157,8 @@ class TuplaG3 : public TuplaG<T,3>
    void operator = ( const TuplaG<T,3> & der ) ;
    void operator = ( const TuplaG<T,4> & der ) ; // asignar ignorando ultimo
 
+   bool operator == ( const TuplaG<T,3> & der) ;
+
    // producto vectorial (cross)  a = v1.cross(v2)
    TuplaG3<T> cross( const TuplaG3<T> & v2 ) const ;
 } ;
@@ -491,6 +493,18 @@ void TuplaG3<T>::operator = ( const TuplaG<T,4> & der )
    (*this)[0] = der(0) ;
    (*this)[1] = der(1) ;
    (*this)[2] = der(2) ;
+}
+
+// ---------------------------------------------------------------------
+
+template< class T > inline
+bool TuplaG3<T>::operator == ( const TuplaG<T,3> & der )
+{
+   bool res = true;
+   res = res && (*this)[0] == der(0);
+   res = res && (*this)[1] == der(1);
+   res = res && (*this)[2] == der(2);
+   return res;
 }
 
 // ---------------------------------------------------------------------

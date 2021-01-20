@@ -18,9 +18,11 @@
 
 #include "cuadro.h"
 
+#include "camara.h"
+
 #include "misc.h"
 
-typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, ANIMACION, AMANUAL, LUCES} menu;
+typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, ANIMACION, AMANUAL, LUCES, CAMARAS} menu;
 class Escena
 {
 
@@ -39,7 +41,7 @@ class Escena
    GLfloat Width, Height, Front_plane, Back_plane;
 
     // Transformación de cámara
-	void change_projection( const float ratio_xy );
+	void change_projection(/* const float ratio_xy */);
 	void change_observer();
 
 
@@ -85,6 +87,12 @@ class Escena
    unsigned int grd_libertad = 0b111;
 
    bool animacion_automatica = false;
+   unsigned int camara = CAM_DEF;
+
+   std::vector<Camara> camaras;
+   unsigned int camaraActiva = 0;
+
+   float xant = 0, yant = 0;
    
    public:
 
@@ -94,12 +102,18 @@ class Escena
 
 	// Dibujar
 	void dibujar() ;
+    void dibujarObjetos();
+    void dibujaSeleccion ();
+    void pick (int x, int y);
 
 	// Interacción con la escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;
 	void teclaEspecial( int Tecla1, int x, int y );
     void animarModeloJerarquico();
     void animarLuz();
+
+    void clickRaton (int boton, int estado, int x, int y);
+    void ratonMovido (int x, int y);
 
 };
 #endif

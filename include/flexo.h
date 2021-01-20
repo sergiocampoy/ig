@@ -61,6 +61,8 @@ private:
     float sentidoBrazo = 1;
     float sentidoAltura = 1;
 
+    Tupla3f color;
+
 public:
     Flexo (int n);
     void draw (unsigned int modo_vis, bool vbo, bool tapas);
@@ -77,6 +79,8 @@ public:
     
     void colorea (Tupla3f c);
     void setMateriales (Material a, Material b);
+
+    Tupla3f getColor () { return color; }
 };
 
 #endif

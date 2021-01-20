@@ -100,6 +100,14 @@ void funcion_idle () {
    glutPostRedisplay();
 }
 
+void clickRaton (int boton, int estado, int x, int y) {
+   escena->clickRaton (boton, estado, x, y);
+}
+
+void ratonMovido (int x, int y) {
+   escena->ratonMovido(x, y);
+}
+
 
 
 //***************************************************************************
@@ -127,18 +135,18 @@ int main( int argc, char **argv )
    // variables que determninan la posicion y tamaño de la ventana X
    
    // default
-   /*
    const int UI_window_pos_x  = 50,
              UI_window_pos_y  = 50,
              UI_window_width  = 500,
              UI_window_height = 500;
-   */
 
    // ultrawide
+   /*
    const int UI_window_pos_x  = 780,
              UI_window_pos_y  = 40,
              UI_window_width  = 1000,
              UI_window_height = 1000;
+   */
 
    // posicion de la esquina inferior izquierdad de la ventana
    glutInitWindowPosition(UI_window_pos_x,UI_window_pos_y);
@@ -163,6 +171,10 @@ int main( int argc, char **argv )
    glutSpecialFunc( special_keys );
 
    glutIdleFunc( funcion_idle );
+
+   glutMouseFunc( clickRaton );
+   glutMotionFunc( ratonMovido );
+   
 
    // inicialización de librería GLEW (solo en Linux)
    #ifdef LINUX

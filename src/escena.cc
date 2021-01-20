@@ -19,24 +19,24 @@ Escena::Escena()
 
    ejes.changeAxisSize (4000);
 
-
+   int n = 256;
    // OBJETOS ESCENA
    cubo       = new Cubo();
    tetraedro  = new Tetraedro(1);
-   cono       = new Cono(4, 16, 1, 1);
-   esfera     = new Esfera(16, 16, 1);
-   flexo      = new Flexo(16);
+   cono       = new Cono(n/4, n, 1, 1);
+   esfera     = new Esfera(n, n, 1);
+   flexo      = new Flexo(n);
    habitacion = new Habitacion();
-   mesa       = new Mesa(16);
+   mesa       = new Mesa(n);
    monitor    = new Monitor("rick");
-   lata       = new Cilindro(4, 16, 3, 1);
-   peon1      = new ObjRevolucion("./plys/peon.ply", 16, 1, true, true);
-   peon2      = new ObjRevolucion("./plys/peon.ply", 16, 1, true, true);
+   lata       = new Cilindro(n/4, n, 3, 1);
+   peon1      = new ObjRevolucion("./plys/peon.ply", n, 1, true, true);
+   peon2      = new ObjRevolucion("./plys/peon.ply", n, 1, true, true);
 
 
    // COLORES
    cubo      -> colorea ({0.8, 0.8, 0.8});
-   tetraedro -> colorea ({0.5, 0.5, 0.5});
+   tetraedro -> colorea ({0.4, 0.4, 0.4});
    cono      -> colorea ({0.2, 0.2, 0.2});
    esfera    -> colorea ({1.0, 0.0, 1.0});
    flexo     -> colorea ({0.0, 0.0, 1.0});
@@ -126,6 +126,42 @@ Escena::Escena()
       {0, 0, 0, 1}
    );
    ambiente = new Ambience (GL_LIGHT1);
+
+
+   // CÁMARAS
+   camaras.push_back(
+      Camara (
+         {0, 100, 100},
+         {0, 0, 0},
+         {0, 1, 0},
+         CAM_1PS,
+         10.0,
+         2000.0
+      )
+   );
+
+   camaras.push_back(
+      Camara (
+         {500, 500, 500},
+         {0, 0, 0},
+         {0, 1, 0},
+         CAM_ORT,
+         10.0,
+         2000.0
+      )
+   );
+
+   camaras.push_back(
+      Camara (
+         {500, 500, 500},
+         {0, 0, 0},
+         {0, 1, 0},
+         0,
+         10.0,
+         2000.0
+      )
+   );
+
 }
 
 //**************************************************************************
@@ -151,7 +187,23 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
 
-   change_projection( float(UI_window_width)/float(UI_window_height) );
+   // parámetros extra de las cámaras
+   camaras[0].setLeft(-15);
+   camaras[0].setRight(15);
+   camaras[0].setBottom(-15);
+   camaras[0].setTop(15);
+
+   camaras[1].setLeft(-400);
+   camaras[1].setRight(400);
+   camaras[1].setBottom(-400);
+   camaras[1].setTop(400);
+
+   camaras[2].setLeft(-5);
+   camaras[2].setRight(5);
+   camaras[2].setBottom(-5);
+   camaras[2].setTop(5);
+
+   change_projection();
 	glViewport( 0, 0, UI_window_width, UI_window_height );
 
    help(modoMenu);
@@ -172,25 +224,22 @@ void Escena::dibujar()
 	change_observer();
    ejes.draw();
 
-   /// TODO: Material WIP
-
-   /// TODO: Luces WIP
-
+   // Aplicar luces
    ld->aplicar();
-   //ld->variarAnguloAlpha(1);
    ambiente->aplicar();
-   /*
-   glLightfv(GL_LIGHT0, GL_DIFFUSE,  difuso);
-   glLightfv(GL_LIGHT0, GL_SPECULAR, especular);
-   glLightfv(GL_LIGHT0, GL_AMBIENT,  ambiente);
-   glLightfv(GL_LIGHT0, GL_POSITION, posicion);
-   */
 
+   // Dibujar objetos
+   dibujarObjetos();
+}
+
+void Escena::dibujarObjetos () {
    glPushMatrix();
       glTranslatef(85, -90, -15);
       glScalef(10, 10, 10);
       if (obj & OBJ_CUB)
          cubo->draw(vis, vbo);
+      if (camaras[camaraActiva].getObjeto() & OBJ_CUB)
+         cubo->draw(vis | VIS_LIN, vbo);
    glPopMatrix();
 
    glPushMatrix();
@@ -198,6 +247,8 @@ void Escena::dibujar()
       glScalef(10, 10, 10);
       if (obj & OBJ_TET)
          tetraedro->draw(vis, vbo);
+      if (camaras[camaraActiva].getObjeto() & OBJ_TET)
+         tetraedro->draw(vis | VIS_LIN, vbo);
    glPopMatrix();
 
    glPushMatrix();
@@ -205,6 +256,8 @@ void Escena::dibujar()
       glScalef(10, 30, 10);
       if (obj & OBJ_CON)
          cono->draw(vis, vbo, obj & OBJ_TAP);
+      if (camaras[camaraActiva].getObjeto() & OBJ_CON)
+         cono->draw(vis | VIS_LIN, vbo, obj & OBJ_TAP);
    glPopMatrix();
 
    glPushMatrix();
@@ -212,14 +265,8 @@ void Escena::dibujar()
       glScalef(30, 30, 30);
       if (obj & OBJ_ESF)
          esfera->draw(vis, vbo, obj & OBJ_TAP);
-   glPopMatrix();
-
-   glPushMatrix();
-      //glTranslatef(120, -90, -200);
-      glTranslatef(-50, -50, 0);
-      glScalef(10, 10, 10);
-      //glRotatef(-90, 0, 1, 0);
-      //flexo->draw(vis, vbo, true);
+      if (camaras[camaraActiva].getObjeto() & OBJ_ESF)
+         esfera->draw(vis | VIS_LIN, vbo, obj & OBJ_TAP);
    glPopMatrix();
    
    glPushMatrix();
@@ -228,6 +275,8 @@ void Escena::dibujar()
       glTranslatef(-0.5, -0.5, -0.5);
       if (obj & OBJ_HAB)
          habitacion->draw(vis, vbo);
+      if (camaras[camaraActiva].getObjeto() & OBJ_HAB)
+         habitacion->draw(vis | VIS_LIN, vbo);
    glPopMatrix();
    
    glPushMatrix();
@@ -235,6 +284,8 @@ void Escena::dibujar()
       glScalef(4, 4, 4);
       if (obj & OBJ_MES)
          mesa->draw (vis, vbo, obj & OBJ_TAP);
+      if (camaras[camaraActiva].getObjeto() & OBJ_MES)
+         mesa->draw(vis | VIS_LIN, vbo, obj & OBJ_TAP);
    glPopMatrix();
    
    glPushMatrix();
@@ -243,6 +294,8 @@ void Escena::dibujar()
       glRotatef(-135, 0, 1, 0);
       if (obj & OBJ_FLE)
          flexo->draw(vis, vbo, obj & OBJ_TAP);
+      if (camaras[camaraActiva].getObjeto() & OBJ_FLE)
+         flexo->draw(vis | VIS_LIN, vbo, obj & OBJ_TAP);
    glPopMatrix();
    
    glPushMatrix();
@@ -250,6 +303,8 @@ void Escena::dibujar()
       glScalef(40, 40, 40);
       if (obj & OBJ_MON)
          monitor->draw(vis, vbo);
+      if (camaras[camaraActiva].getObjeto() & OBJ_MON)
+         monitor->draw(vis | VIS_LIN, vbo);
    glPopMatrix();
 
    glPushMatrix();
@@ -259,109 +314,31 @@ void Escena::dibujar()
       glRotatef(90, 0, 1, 0);
       if (obj & OBJ_LAT)
          lata->draw(vis, vbo, obj & OBJ_TAP);
+      if (camaras[camaraActiva].getObjeto() & OBJ_LAT)
+         lata->draw(vis | VIS_LIN, vbo, obj & OBJ_TAP);
    glPopMatrix();
    
    glPushMatrix();
       glTranslatef(-25, -90, 30);
       glScalef(20, 20, 20);
       glTranslatef(0, 1.4, 0);
-      glRotatef(-90, 0, 1, 0);
+      glRotatef(90, 0, 1, 0);
       if (obj & OBJ_PE1)
          peon1->draw(vis, vbo, obj & OBJ_TAP);
+      if (camaras[camaraActiva].getObjeto() & OBJ_PE1)
+         peon1->draw(vis | VIS_LIN, vbo, obj & OBJ_TAP);
    glPopMatrix();
    
    glPushMatrix();
       glTranslatef(25, -90, 30);
       glScalef(20, 20, 20);
       glTranslatef(0, 1.4, 0);
+      glRotatef(90, 0, 1, 0);
       if (obj & OBJ_PE2)
          peon2->draw(vis, vbo, obj & OBJ_TAP);
+      if (camaras[camaraActiva].getObjeto() & OBJ_PE2)
+         peon2->draw(vis | VIS_LIN, vbo, obj & OBJ_TAP);
    glPopMatrix();
-
-
-
-
-
-
-
-
-
-
-
-    // COMPLETAR
-    //   Dibujar los diferentes elementos de la escena
-    // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
-    // y hacer 
-   
-   /*
-   glPushMatrix();
-   glTranslatef(-150, -150, -50);
-   glScalef(300, 300, 0);
-   if (obj & OBJ_CUB)
-      cuadro->draw(vis, vbo);
-   glPopMatrix();
-   */
-   /*
-   
-   glPushMatrix();
-   glTranslatef(0, -25, 0);
-   glScalef(25, 50, 25);
-   if (obj & OBJ_REV)
-      cilindro->draw(vis, vbo, true);
-   glPopMatrix();
-*/
-   /*
-   glPushMatrix();
-   glTranslatef(100, 0, 0);
-   if (obj & OBJ_CUB)
-      cubo->draw(vis, vbo);
-   glPopMatrix();
-
-   glPushMatrix();
-   glTranslatef(-100, 0, 0);
-   if (obj & OBJ_TET)
-      tetraedro->draw(vis, vbo);
-   glPopMatrix();
-
-   glPushMatrix();
-   glTranslatef(0, 0, -100);
-   glRotatef(-90, 1, 0, 0);
-   glScalef(10, 10, 10);
-   if (obj & OBJ_PLY)
-      ply->draw(vis, vbo);
-   glPopMatrix();
-
-   // Objetos de revolución
-   glPushMatrix();
-   glTranslatef(0, 0, 40);
-   glScalef(20, 20, 20);
-   if (obj & OBJ_REV)
-      rev->draw(vis, vbo, obj & OBJ_TAP);
-   glPopMatrix();
-   
-   glPushMatrix();
-   glTranslatef(0, 0, -40);
-   glScalef(20, 20, 20);
-   if (obj & OBJ_REV)
-      cono->draw(vis, vbo, obj & OBJ_TAP);
-   glPopMatrix();
-   */
-  /*
-   glPushMatrix();
-   glTranslatef(50, 0, 0);
-   glScalef(20, 20, 20);
-   if (obj & OBJ_REV)
-      cono->draw(vis, vbo, obj & OBJ_TAP);
-   glPopMatrix();
-   
-   glPushMatrix();
-   glTranslatef(-50, 0, 0);
-   glScalef(20, 20, 20);
-   if (obj & OBJ_REV)
-      esfera->draw(vis, vbo, obj & OBJ_TAP);
-   glPopMatrix();
-*/
-   
 }
 
 //**************************************************************************
@@ -434,7 +411,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          }
       break;
       case 'C':
-         if (modoMenu == SELOBJETO) {
+         if (modoMenu == NADA) {
+            modoMenu = CAMARAS;
+            help(modoMenu);
+         } else if (modoMenu == SELOBJETO) {
             // Activar/desactivar cubo
             obj ^= OBJ_CUB;
             if (obj & OBJ_CUB) {
@@ -690,7 +670,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          }
       break;
       case '1' :
-         if (modoMenu == SELDIBUJADO) {
+         if (modoMenu == CAMARAS) {
+            camaraActiva = 0;
+            change_projection();
+            cout << "Cámara en primera persona " << FGRN("activada") << endl;
+         } else if (modoMenu == SELDIBUJADO) {
             vbo = false;
             cout << "Modo inmediato " << FGRN("activado") << endl;
             cout << "Modo diferido " << FRED("desactivado") << endl;
@@ -719,7 +703,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          }
       break;
       case '2' :
-         if (modoMenu == SELDIBUJADO) {
+         if (modoMenu == CAMARAS) {
+            camaraActiva = 1;
+            change_projection();
+            cout << "Cámara ortogonal " << FGRN("activada") << endl;
+         } else if (modoMenu == SELDIBUJADO) {
             vbo = true;
             cout << "Modo diferido " << FRED("activado") << endl;
             cout << "Modo inmediato " << FGRN("desactivado") << endl;
@@ -748,7 +736,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          }
       break;
       case '3':
-         if (modoMenu == AMANUAL || modoMenu == ANIMACION) {
+         if (modoMenu == CAMARAS) {
+            camaraActiva = 2;
+            change_projection();
+            cout << "Cámara en tercera persona " << FGRN("activada") << endl;
+         } else if (modoMenu == AMANUAL || modoMenu == ANIMACION) {
             grd_libertad = 0b100; // Altura
          } else if (modoMenu == LUCES) {
             if (glIsEnabled(GL_LIGHT2)) {
@@ -845,16 +837,20 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
    switch ( Tecla1 )
    {
 	   case GLUT_KEY_LEFT:
-         Observer_angle_y-- ;
+         Observer_angle_y-- ; camaras[camaraActiva].girar3p(1, 0);
+         //camaras[camaraActiva].rotarYExaminar(-1.0*2*M_PI/360.0);
          break;
 	   case GLUT_KEY_RIGHT:
-         Observer_angle_y++ ;
+         Observer_angle_y++ ; camaras[camaraActiva].girar3p(-1, 0);
+         //camaras[camaraActiva].rotarYExaminar(1.0*2*M_PI/360.0);
          break;
 	   case GLUT_KEY_UP:
-         Observer_angle_x-- ;
+         Observer_angle_x-- ; camaras[camaraActiva].girar3p(0, 1);
+         //camaras[camaraActiva].rotarZExaminar(-1.0*2*M_PI/360.0);
          break;
 	   case GLUT_KEY_DOWN:
-         Observer_angle_x++ ;
+         Observer_angle_x++ ; camaras[camaraActiva].girar3p(0, -1);
+         //camaras[camaraActiva].rotarZExaminar(1.0*2*M_PI/360.0);
          break;
 	   case GLUT_KEY_PAGE_UP:
          Observer_distance *=1.2 ;
@@ -874,12 +870,19 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
 //
 //***************************************************************************
 
-void Escena::change_projection( const float ratio_xy )
+void Escena::change_projection(/* const float ratio_xy */)
 {
+   glMatrixMode (GL_PROJECTION);
+   glLoadIdentity();
+   camaras[camaraActiva].setProyeccion();
+
+   // OLD change_proyection
+   /*
    glMatrixMode( GL_PROJECTION );
    glLoadIdentity();
    const float wx = float(Height)*ratio_xy ;
    glFrustum( -wx, wx, -Height, Height, Front_plane, Back_plane );
+   */
 }
 //**************************************************************************
 // Funcion que se invoca cuando cambia el tamaño de la ventana
@@ -887,10 +890,22 @@ void Escena::change_projection( const float ratio_xy )
 
 void Escena::redimensionar( int newWidth, int newHeight )
 {
+   float ratio = (float)newWidth/(float)newHeight;
+
+   for (unsigned int i = 0; i < camaras.size(); i++) {
+      camaras[i].redimensionar(ratio);
+   }
+
+   change_projection();
+   glViewport (0, 0, newWidth, newHeight);
+
+   // OLD redimensionar
+   /*
    Width  = newWidth/10;
    Height = newHeight/10;
    change_projection( float(newHeight)/float(newWidth) );
    glViewport( 0, 0, newWidth, newHeight );
+   */
 }
 
 //**************************************************************************
@@ -899,12 +914,19 @@ void Escena::redimensionar( int newWidth, int newHeight )
 
 void Escena::change_observer()
 {
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();
+   camaras[camaraActiva].setObserver();
+
+   // PRE - P6
+   /*
    // posicion del observador
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
    glTranslatef( 0.0, 0.0, -Observer_distance );
    glRotatef( Observer_angle_y, 0.0 ,1.0, 0.0 );
    glRotatef( Observer_angle_x, 1.0, 0.0, 0.0 );
+   */
 }
 
 
@@ -1013,6 +1035,16 @@ void Escena::help(menu modoMenu)
             "G - Modo Gamer\n"
             "+ - Aumentar el valor o velocidad\n"
             "- - Disminuir el valor o velocidad\n"
+         );
+      break;
+      case CAMARAS:
+      printf(
+            BOLD(FBLU("Opciones Cámaras\n"))
+            "H - Muestra este menú\n"
+            "Q - Volver al menú principal\n"
+            "1 - Seleccionar cámara en primera persona\n"
+            "2 - Cámara ortogonal (3a persona)\n"
+            "3 - Cámara ortogonal (3a persona)\n"
          );
       break;
    }
@@ -1140,5 +1172,147 @@ void Escena::animarModeloJerarquico() {
 void Escena::animarLuz () {
    if (modificarGamer) {
       ambiente->animar();
+   }
+}
+
+void Escena::clickRaton (int boton, int estado, int x, int y) {
+
+   xant = x;
+   yant = y;
+
+   if (boton == GLUT_RIGHT_BUTTON) {
+      if (estado == GLUT_DOWN) {
+         // entra en el estado 'moviendo cámara'
+         camara |= CAM_MOV;
+         //camara |= CAM_1PS;
+      } else {
+         // sale del estado 'moviendo cámara' 
+         camara &= ~CAM_MOV;
+      }
+   }
+
+   // Rueda del ratón
+   if (boton == 3) {
+      camaras[camaraActiva].zoom(0.8);
+   }
+   if (boton == 4) {
+      camaras[camaraActiva].zoom(1.2);
+   }
+
+   // Seleccionar objeto
+   if (boton == GLUT_LEFT_BUTTON && estado == GLUT_DOWN) {
+      dibujaSeleccion();
+      pick(x, y);
+      // dibujaSeleccion();
+      /*
+      GLfloat pixel[3];
+      glReadPixels (x, y, 1, 1, GL_RGB, GL_FLOAT, (void*)pixel);
+
+      printf("%f, %f, %f\n", pixel[0], pixel[1], pixel[2]);
+      // void glReadPixels ( GLint x , GLint y , GLsizei width , GLsizei height ,GLenum format , GLenum type , GLvoid * pixels );
+*/
+   }
+
+   change_projection();
+}
+
+void Escena::ratonMovido (int x, int y) {
+   if (camara & CAM_MOV) {
+      // Voy a mover la cámara
+      if (camara & CAM_1PS && camaras[camaraActiva].getTipo() & CAM_1PS) {
+         // Estoy en primera persona
+         camaras[camaraActiva].girar(x-xant, y-yant);
+         xant = x;
+         yant = y;
+      } else {
+         // Estoy en tercera persona
+         camaras[camaraActiva].girar3p(x-xant, y-yant);
+         xant = x;
+         yant = y;
+      }
+   }
+}
+
+void Escena::dibujaSeleccion () {
+   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
+	change_observer();
+
+   glDisable (GL_DITHER);
+
+   bool tex = vis & VIS_TEX;
+   vis &= ~VIS_TEX; // deshabilita texturas
+
+   bool lighting = glIsEnabled (GL_LIGHTING);
+   glDisable (GL_LIGHTING);
+
+   dibujarObjetos();
+
+   glEnable (GL_DITHER);
+   
+   if (tex)
+      vis |= VIS_TEX; // habilita texturas si es necesario
+
+   if (lighting)
+      glEnable (GL_LIGHTING); // habilita la luz si es necesario
+
+}
+
+void Escena::pick (int x, int y) {
+   // Obtiene el color
+   GLfloat pixel[3];
+   GLint viewport[4];
+
+   glGetIntegerv (GL_VIEWPORT, viewport);
+   glReadPixels(x, viewport[3]-y, 1, 1, GL_RGB, GL_FLOAT, pixel);
+
+   Tupla3f color (pixel[0], pixel[1], pixel[2]);
+   printf("(%f, %f, %f)\n", color(0), color(1), color(2));
+   printf("(%f, %f, %f)\n", lata->getColor()(0), lata->getColor()(1), lata->getColor()(2));
+   
+
+   camara &= ~CAM_1PS;
+
+   // Obtiene el objeto al que pertenece el color
+
+   if (color == cubo->getColor()) {
+      camaras[camaraActiva].setObjeto(OBJ_CUB);
+      camaras[camaraActiva].setAt(85, -90, -15);
+   } else if (color == tetraedro->getColor()) {
+      camaras[camaraActiva].setObjeto(OBJ_TET);
+      camaras[camaraActiva].setAt(-120, -90 - 10*sin(-M_PI/6), -10);
+   } else if (color == cono->getColor()) {
+      camaras[camaraActiva].setObjeto(OBJ_CON);
+      camaras[camaraActiva].setAt(-120, -90, 15);
+   } else if (color == esfera->getColor()) {
+      camaras[camaraActiva].setObjeto(OBJ_ESF);
+      camaras[camaraActiva].setAt(0, -220, 0);
+   } else if (color == flexo->getColor()) {
+      camaras[camaraActiva].setObjeto(OBJ_FLE);
+      camaras[camaraActiva].setAt(120, -90, -30);
+   } else if (color == habitacion->getColor()) {
+      /*
+      camaras[camaraActiva].setObjeto(OBJ_CUB);
+      camaras[camaraActiva].setAt(-0.5, -0.5, -0.5);
+      */
+      camaras[camaraActiva].setObjeto(0);
+      camara |= CAM_1PS;
+   } else if (color == mesa->getColor()) {
+      camaras[camaraActiva].setObjeto(OBJ_MES);
+      camaras[camaraActiva].setAt(0, -90, 0);
+   } else if (color == monitor->getColor()) {
+      camaras[camaraActiva].setObjeto(OBJ_MON);
+      camaras[camaraActiva].setAt(0, -90, -30);
+   } else if (color == lata->getColor()) {
+      camaras[camaraActiva].setObjeto(OBJ_LAT);
+      camaras[camaraActiva].setAt(-120, -90, -40);
+   } else if (color == peon1->getColor()) {
+      camaras[camaraActiva].setObjeto(OBJ_PE1);
+      camaras[camaraActiva].setAt(-25, -90, 30);
+   } else if (color == peon2->getColor()) {
+      camaras[camaraActiva].setObjeto(OBJ_PE2);
+      camaras[camaraActiva].setAt(25, -90, 30);
+   } else {
+      camaras[camaraActiva].setObjeto(0);
+      camara |= CAM_1PS;
    }
 }

@@ -45,6 +45,8 @@ class Malla3D
 
    void colorea(const Tupla3f c);
 
+   Tupla3f getColor() { return color; }
+
    void setMaterial (const Material& m);
 
    protected:
@@ -59,6 +61,8 @@ class Malla3D
    std::vector<Tupla3f> v ; // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
    std::vector<Tupla3i> f ; // una terna de 3 enteros por cada cara o triángulo
    std::vector<Tupla3f> c ; // tabla de colores de los vértices (una tupla por vértice, con tres floats)
+
+   Tupla3f color;
 
    std::vector<Tupla3f> c_p; // colores modo puntos
    std::vector<Tupla3f> c_l; // colores modo líneas

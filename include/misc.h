@@ -37,6 +37,15 @@
 #define VIS_TEX 0b10000
 
 
+// Modo de la cámara
+
+#define CAM_DEF 0b010
+
+#define CAM_ORT 0b001
+#define CAM_1PS 0b010
+#define CAM_MOV 0b100
+
+
 // colores terminal
 
 #define RST   "\x1B[0m"

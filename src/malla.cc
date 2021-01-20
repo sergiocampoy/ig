@@ -343,6 +343,7 @@ void Malla3D::draw_ModoDiferido_Ajedrez()
 
 void Malla3D::colorea(const Tupla3f c)
 {
+   color = c;
    // colores
    //Tupla3f c_solido(0.8f, 0.8f, 0.8f); // Gris
    Tupla3f c_linea (0.0f, 1.0f, 0.0f); // Verde

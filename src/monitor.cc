@@ -34,6 +34,7 @@ void Monitor::draw (unsigned int modo_vis, bool vbo) {
 }
 
 void Monitor::colorea (Tupla3f c) {
+    color = c;
     monitor->colorea(c);
     pantalla->colorea(c);
 }

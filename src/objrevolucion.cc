@@ -144,7 +144,7 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    calcular_normales();
    // Apañar las normales en los bordes
    for (unsigned int i = 0; i < J; i++) {
-      nv[i] = nv[i + J*I];
+      nv[i] = nv[i + (J)*(I-1)];
    }
 
 }
